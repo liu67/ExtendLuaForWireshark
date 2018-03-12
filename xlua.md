@@ -1,0 +1,1284 @@
+ï»¿# xlua
+
+---- ---- ---- ----
+
+ç”±äºLuaæ²¡æœ‰å¼ºåˆ¶ç±»å‹ï¼Œæ‰©å±•å‡½æ•°ä»¥ä¼ªä»£ç å½¢å¼å±•ç¤º
+
+æ³¨æ„åˆ°æ‰€æœ‰ç®€åŒ–å‡½æ•°å®šä¹‰ä¸º
+
+```
+functionXX            = function( ... ) return functionX                   ( ... ); end 
+```
+è€Œä¸å®šä¹‰ä¸º
+
+```
+functionXX            = functionX;
+```
+æ˜¯è€ƒè™‘å½“`functionX`è¢«ä¿®æ”¹æ—¶ï¼Œ`functionXX`èƒ½éšä¹‹æ”¹å˜ã€‚æ­¤ä¸ºè®°
+
+---- ---- ---- ----
+
+## AES
+
+- AESæ•°æ®å—å¤§å° 16 byte ã€‚ä¸å¯¹é½éƒ¨åˆ†ä¸å¤„ç†ï¼Œå¿½ç•¥ä¹‹
+- æä¾›çš„KEYé•¿åº¦ä¸è¶³ 16/24/32 byteæ—¶ï¼Œä»¥\x00è¡¥è¶³ï¼ˆä¿è¯set keyä¸å‡ºé”™ï¼‰
+- æä¾›çš„å‘é‡é•¿åº¦ä¸è¶³ 16 byteæ—¶ï¼Œä»¥\x00è¡¥è¶³
+
+### AES/ECB/PKCS7Padding
+
+```
+string    aes_ecb_pkcs7padding_encrypt
+                                    (
+                                    string data,
+                                    string key
+                                    );
+string    aes.ecb.p7enc             ( ... );
+string    string:aes_ecb_p7_enc     ( ... );
+
+string    aes_ecb_pkcs7padding_decrypt
+                                    (
+                                    string data,
+                                    string key
+                                    );
+string    aes.ecb.p7dec             ( ... );
+string    string:aes_ecb_p7_dec     ( ... );
+```
+
+### AES/CBC/PKCS7Padding
+
+```
+string    aes_cbc_pkcs7padding_encrypt
+                                    (
+                                    string data,
+                                    string key,
+                                    string ivec = "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0"
+                                    );
+string    aes.cbc.p7enc             ( ... );
+string    string:aes_cbc_p7_enc     ( ... );
+
+string    aes_cbc_pkcs7padding_decrypt
+                                    (
+                                    string data,
+                                    string key,
+                                    string ivec = "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0"
+                                    );
+string    aes.cbc.p7dec             ( ... );
+string    string:aes_cbc_p7_dec     ( ... );
+```
+
+### AES/ECB/NoPadding
+
+```
+string    aes_ecb_encrypt           ( string data, string key );
+string    aes.ecb.enc               ( ... );
+string    aes.ecb.enc               ( ... );
+
+string    aes_ecb_decrypt           ( string data, string key );
+string    string:aes_ecb_enc        ( ... );
+string    string:aes_ecb_dec        ( ... );
+```
+
+### AES/CBC/NoPadding
+
+```
+string    aes_cbc_encrypt           (
+                                    string data,
+                                    string key,
+                                    string ivec = "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0"
+                                    );
+string    aes.cbc.enc               ( ... );
+string    string:aes_cbc_enc        ( ... );
+
+string    aes_cbc_decrypt           (
+                                    string data,
+                                    string key,
+                                    string ivec = "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0"
+                                    );
+string    aes.cbc.dec               ( ... );
+string    string:aes_cbc_dec        ( ... );
+```
+
+---- ---- ---- ----
+
+## xrand
+
+```
+number    xrand           ( number mod = 0 );
+```
+
+---- ---- ---- ----
+
+## strxor
+
+- xorå› å­å¯ä»¥ä¸ºå­—ç¬¦ä¸²åŸå§‹å€¼å¦‚"\x12\x34"
+- å½“xorå› å­ä¸ºæ•°å€¼æ—¶ï¼Œå°†è½¬æ¢æˆå°ç«¯åºçš„å­—ç¬¦ä¸²åŸå§‹å€¼ï¼Œå¹¶å»é™¤é«˜ä½00ã€‚å¦‚0x00001234ç­‰ä»·äº"\x34\x12"
+- è¯·ä¸è¦æä¾›0å€¼ï¼Œå› ä¸ºæ²¡æœ‰æ„ä¹‰ï¼Œå‡½æ•°ä¼šè§†xorå› å­ä¸ºç©ºä¸²
+- xorå› å­ä¸ºç©ºä¸²æ—¶ï¼Œå‡½æ•°ç›´æ¥è¿”å›data
+
+```
+string    strxor          ( string data, number|string xor );
+string    string:xor      ( ... );
+```
+
+---- ---- ---- ----
+
+## MD5
+
+```
+string    md5             ( string data );
+string    string:md5      ( );
+```
+
+---- ---- ---- ----
+
+## CRC
+
+```
+number    crc16           ( string data );
+number    crc32           ( string data );
+number    crc64           ( string data );
+number    crcccitt        ( string data );
+
+number    string:crc16    ( );
+number    string:crc32    ( );
+number    string:crc64    ( );
+number    string:crcccitt ( );
+```
+
+---- ---- ---- ----
+
+## varint
+
+```
+string    tovarint        ( number value, bool signed = false );
+
+// å½“è¿”å› usebytes == 0æ—¶ï¼Œè¡¨ç¤ºæ“ä½œå¤±è´¥
+number value, number usebytes
+          getvarint       ( string data, bool signed = false );
+number value, number usebytes
+          string:getvarint( ... );
+```
+
+---- ---- ---- ----
+
+## TEA
+
+```
+string    TeanEncrypt     ( string data, string key );
+string    TeanDecrypt     ( string data, string key );
+string    TeaEncrypt      (
+                          string  data,
+                          string  key,
+                          number  delta,
+                          number  round
+                          );
+string    TeaDecrypt      (
+                          string  data,
+                          string  key,
+                          number  delta,
+                          number  round
+                          );
+string    TeanEncipher    ( string data, string key );
+string    TeanDecipher    ( string data, string key );
+string    XTeanEncrypt    ( string data, string key );
+string    XTeanDecrypt    ( string data, string key );
+string    XxTeaEncrypt    ( string data, string key );
+string    XxTeaDecrypt    ( string data, string key );
+
+string    string:tean_enc ( ... );
+string    string:tean_dec ( ... );
+string    string:tea_enc  ( ... );
+string    string:tea_dec  ( ... );
+string    string:tean_enr ( ... );
+string    string:tean_der ( ... );
+string    string:xtean_enc( ... );
+string    string:xtean_dec( ... );
+string    string:xxtea_enc( ... );
+string    string:xxtea_dec( ... );
+```
+
+---- ---- ---- ----
+
+## AES RAW
+
+```
+string    aes_encrypt     ( string data, string key );
+string    aes_decrypt     ( string data, string key );
+
+string    string:aes_enc  ( ... );
+string    string:aes_dec  ( ... );
+```
+
+---- ---- ---- ----
+
+## DES RAW
+
+```
+string    des_encrypt     ( string data, string key );
+string    des_decrypt     ( string data, string key );
+
+string    string:des_enc  ( string key );
+string    string:des_dec  ( string key );
+```
+
+---- ---- ---- ----
+
+## HEX & BIN
+
+### hex2bin
+
+```
+string    hex2bin         (
+                          string   hex,
+                          bool     errexit       = false,
+                          bool     errbreak      = false
+                          );
+string    string:hex2bin  ( ... );
+string    string.bins     ( ... );
+```
+
+### bin2hex
+
+```
+string    bin2hex         ( string data, bool isup = false );
+string    string:bin2hex  ( ... );
+```
+
+### showbin
+
+ä¸ºäº†ç®€åŒ–å‚æ•°ï¼Œè®¾è®¡flag
+
+- flag & 1 è¡¨ç¤ºASCII
+- flag & 2 è¡¨ç¤ºUnicode
+- flag & 8 è¡¨ç¤ºUTF8
+- flag & 4 è¡¨ç¤ºisup == false
+- flag >= 0x10çš„éƒ¨åˆ†è¢«å½“ä½œprewså‚æ•°
+
+```
+string    showbin         ( string data, number flag = 1 );
+string    string:showbin  ( ... );
+string    string:show     ( ... );
+```
+
+---- ---- ---- ----
+
+## ASCII & UCS2
+
+```
+string    ws2s            ( string s );
+string    string:ws2s     ( );
+
+string    s2ws            ( string ws );
+string    string:s2ws     ( );
+```
+
+---- ---- ---- ----
+
+## UTF8
+
+```
+string    utf82ws         ( string utf8 );
+string    string:utf82ws  ( );
+
+string    ws2utf8         ( string ws );
+string    string:ws2utf8  ( );
+
+string    utf82s          ( string utf8 );
+string    string:utf82s   ( );
+
+string    s2utf8          ( string s );
+string    string:s2utf8   ( );
+```
+
+---- ---- ---- ----
+
+## FILE
+
+### readfile
+
+- è¯»æ–‡ä»¶å¤±è´¥æ—¶ï¼Œè¿”å›nil, é”™è¯¯ä¿¡æ¯
+
+```
+string    readfile        ( string filename, string mode = "rb" );
+string    string:read     ( ... );
+```
+
+### writefile
+
+- å†™æ–‡ä»¶å¤±è´¥æ—¶ï¼Œè¿”å›é”™è¯¯ä¿¡æ¯
+
+```
+void      writefile       ( string data, string filename, string mode = "wb" );
+void      string:write    ( ... );
+```
+
+---- ---- ---- ----
+
+## BLOWFISH
+
+- BLOWFISHæ•°æ®å—å¤§å° 8 byte ã€‚ä¸å¯¹é½éƒ¨åˆ†ä¸å¤„ç†ï¼Œå¿½ç•¥ä¹‹
+- æä¾›çš„å‘é‡é•¿åº¦ä¸è¶³ 8 byteæ—¶ï¼Œä»¥\x00è¡¥è¶³
+- æ³¨æ„ä¸è¡¥å……KEY
+
+### BF/ECB/PKCS7Padding
+
+```
+string    blowfish_ecb_pkcs7padding_encrypt
+                                    (
+                                    string data,
+                                    string key
+                                    );
+string    blowfish.ecb.p7enc        ( ... );
+string    string:bf_ecb_p7_enc      ( ... );
+
+string    blowfish_ecb_pkcs7padding_decrypt
+                                    (
+                                    string data,
+                                    string key
+                                    );
+string    blowfish.ecb.p7dec        ( ... );
+string    string:bf_ecb_p7_dec      ( ... );
+```
+
+### BF/CBC/PKCS7Padding
+
+```
+string    blowfish_cbc_pkcs7padding_encrypt
+                                    (
+                                    string data,
+                                    string key,
+                                    string ivec = "\0\0\0\0\0\0\0\0"
+                                    );
+string    blowfish.cbc.p7enc        ( ... );
+string    string:bf_cbc_p7_enc      ( ... );
+
+string    blowfish_cbc_pkcs7padding_decrypt
+                                    (
+                                    string data,
+                                    string key,
+                                    string ivec = "\0\0\0\0\0\0\0\0"
+                                    );
+string    blowfish.cbc.p7dec        ( ... );
+string    string:bf_cbc_p7_dec      ( ... );
+```
+
+### BF/ECB/NoPadding
+
+```
+string    blowfish_ecb_encrypt      ( string data, string key );
+string    blowfish.ecb.enc          ( ... );
+string    string:bf_ecb_enc         ( ... );
+
+string    blowfish_ecb_decrypt      ( string data, string key );
+string    blowfish.ecb.enc          ( ... );
+string    string:bf_ecb_dec         ( ... );
+```
+
+### BF/CBC/NoPadding
+
+```
+string    blowfish_cbc_encrypt      (
+                                    string data,
+                                    string key,
+                                    string ivec = "\0\0\0\0\0\0\0\0"
+                                    );
+string    blowfish.cbc.enc          ( ... );
+string    string:bf_cbc_enc         ( ... );
+
+string    blowfish_cbc_decrypt      (
+                                    string data,
+                                    string key,
+                                    string ivec = "\0\0\0\0\0\0\0\0"
+                                    );
+string    blowfish.cbc.dec          ( ... );
+string    string:bf_cbc_dec         ( ... );
+```
+
+---- ---- ---- ----
+
+## DES
+
+- DESæ•°æ®å—å¤§å° 8 byte ã€‚ä¸å¯¹é½éƒ¨åˆ†ä¸å¤„ç†ï¼Œå¿½ç•¥ä¹‹
+- æä¾›çš„KEYé•¿åº¦ä¸è¶³ 8 byteæ—¶ï¼Œä»¥\x00è¡¥è¶³
+- æä¾›çš„å‘é‡é•¿åº¦ä¸è¶³ 8 byteæ—¶ï¼Œä»¥\x00è¡¥è¶³
+
+### DES/ECB/PKCS7Padding
+
+```
+string    des_ecb_pkcs7padding_encrypt
+                                    (
+                                    string data,
+                                    string key
+                                    );
+string    des.ecb.p7enc             ( ... );
+string    string:des_ecb_p7_enc     ( ... );
+
+string    des_ecb_pkcs7padding_decrypt
+                                    (
+                                    string data,
+                                    string key
+                                    );
+string    des.ecb.p7dec             ( ... );
+string    string:des_ecb_p7_dec     ( ... );
+```
+
+### DES/CBC/PKCS7Padding
+
+```
+string    des_cbc_pkcs7padding_encrypt
+                                    (
+                                    string data,
+                                    string key,
+                                    string ivec = "\0\0\0\0\0\0\0\0"
+                                    );
+string    des.cbc.p7enc             ( ... );
+string    string:des_cbc_p7_enc     ( ... );
+
+string    des_cbc_pkcs7padding_decrypt
+                                    (
+                                    string data,
+                                    string key,
+                                    string ivec = "\0\0\0\0\0\0\0\0"
+                                    );
+string    des.cbc.p7dec             ( ... );
+string    string:des_cbc_p7_dec     ( ... );
+```
+
+### DES/NCBC/PKCS7Padding
+
+```
+string    des_ncbc_pkcs7padding_encrypt
+                                    (
+                                    string data,
+                                    string key
+                                    string ivec = "\0\0\0\0\0\0\0\0"
+                                    );
+string    des.ncbc.p7enc            ( ... );
+string    string:des_ncbc_p7_enc    ( ... );
+
+string    des_ncbc_pkcs7padding_decrypt
+                                    (
+                                    string data,
+                                    string key
+                                    string ivec = "\0\0\0\0\0\0\0\0"
+                                    );
+string    des.ncbc.p7dec            ( ... );
+string    string:des_ncbc_p7_dec    ( ... );
+```
+
+### 3DES/ECB/PKCS7Padding
+
+- 3DESçš„KEYè¾“å…¥è¦æ±‚ï¼šKEY == K1 .. K2 .. K3
+- K1ä¸å­˜åœ¨æˆ–ä¸è¶³æ—¶ï¼Œä»¥\x00è¡¥é½
+- K2ä¸å­˜åœ¨æ—¶ï¼ŒK2 == K1ã€‚ä¸è¶³æ—¶ï¼Œä»¥\x00è¡¥é½
+- K3ä¸å­˜åœ¨æ—¶ï¼ŒK3 == K1ã€‚ä¸è¶³æ—¶ï¼Œä»¥\x00è¡¥é½
+
+```
+string    des_ecb3_pkcs7padding_encrypt
+                                    (
+                                    string data,
+                                    string key
+                                    );
+string    des.ecb3.p7enc            ( ... );
+string    string:des_ecb3_p7_enc    ( ... );
+
+string    des_ecb3_pkcs7padding_decrypt
+                                    (
+                                    string data,
+                                    string key
+                                    );
+string    des.ecb3.p7dec            ( ... );
+string    string:des_ecb3_p7_dec    ( ... );
+```
+
+### DES/ECB/NoPadding
+
+```
+string    des_ecb_encrypt           ( string data, string key );
+string    des.ecb.enc               ( ... );
+string    des.ecb.enc               ( ... );
+
+string    des_ecb_decrypt           ( string data, string key );
+string    string:des_ecb_enc        ( ... );
+string    string:des_ecb_dec        ( ... );
+```
+
+### DES/CBC/NoPadding
+
+```
+string    des_cbc_encrypt           (
+                                    string data,
+                                    string key,
+                                    string ivec = "\0\0\0\0\0\0\0\0"
+                                    );
+string    des.cbc.enc               ( ... );
+string    string:des_cbc_enc        ( ... );
+
+string    des_cbc_decrypt           (
+                                    string data,
+                                    string key,
+                                    string ivec = "\0\0\0\0\0\0\0\0"
+                                    );
+string    des.cbc.dec               ( ... );
+string    string:des_cbc_dec        ( ... );
+```
+
+### DES/NCBC/NoPadding
+
+``` 
+string    des_ncbc_encrypt          (
+                                    string data,
+                                    string key,
+                                    string ivec = "\0\0\0\0\0\0\0\0"
+                                    );
+string    des.ncbc.enc            ( ... );
+string    string:des_ncbc_enc     ( ... );
+
+string    des_ncbc_decrypt          (
+                                    string data,
+                                    string key,
+                                    string ivec = "\0\0\0\0\0\0\0\0"
+                                    );
+string    des.ncbc.dec            ( ... );
+string    string:des_ncbc_dec     ( ... );
+```
+
+### 3DES/ECB/NoPadding
+
+```
+string    des_ecb3_encrypt          ( string data, string key );
+string    des.ecb3.enc            ( ... );
+string    string:des_ecb3_enc     ( ... );
+
+string    des_ecb3_decrypt          ( string data, string key );
+string    des.ecb3.enc            ( ... );
+string    string:des_ecb3_dec     ( ... );
+```
+
+---- ---- ---- ----
+
+## MEM
+
+- æ‰€æœ‰æŒ‡é’ˆä»¥intergerå½¢å¼ä¼ è¾“ï¼Œè€Œä¸æ˜¯é‡‡ç”¨light userdataå½¢å¼ï¼Œæ˜¯è€ƒè™‘æŒ‡é’ˆè¿ç®—ï¼Œæ ¼å¼åŒ–è¾“å‡ºç­‰ä¾¿åˆ©
+- æ“ä½œå¤±è´¥ï¼ŒæŠ›å‡ºé”™è¯¯
+
+```
+string    readmem         ( void* lpmem, number size = 1 );
+
+void      writemem        ( void* lpmem, string writebytes );
+
+void*     newmem          ( number size );  // ä»¥byteè®¡
+
+bool      deletemem       ( void* lpmem );  // é‡Šæ”¾ç”±newmemç”³è¯·çš„å†…å­˜
+
+/*
+  å‚æ•°valueä¸å­˜åœ¨æ—¶ï¼Œè§†ä¸ºè¯»å†…å­˜æ“ä½œï¼ŒæˆåŠŸåˆ™è¿”å›ç›¸åº”å€¼ï¼Œå¤±è´¥åˆ™æŠ›å‡ºé”™è¯¯
+  å‚æ•°valueå­˜åœ¨æ—¶ï¼Œè§†ä¸ºè¯»å†…å­˜æ“ä½œï¼ŒæˆåŠŸåˆ™æ— è¿”å›å€¼ï¼Œå¤±è´¥åˆ™æŠ›å‡ºé”™è¯¯
+*/
+          mkb             ( void* lpmem [, number value] ); // è¯»/å†™æ— ç¬¦å·byteå€¼ï¼Œå°ç«¯
+          mkB             ( void* lpmem [, number value] ); // è¯»/å†™æ— ç¬¦å·byteå€¼ï¼Œå¤§ç«¯
+          mkbs            ( void* lpmem [, number value] ); // è¯»/å†™æœ‰ç¬¦å·byteå€¼ï¼Œå°ç«¯
+          mkBs            ( void* lpmem [, number value] ); // è¯»/å†™æœ‰ç¬¦å·byteå€¼ï¼Œå¤§ç«¯
+
+          mkw             ( void* lpmem [, number value] ); // è¯»/å†™æ— ç¬¦å·wordå€¼ï¼Œå°ç«¯
+          mkW             ( void* lpmem [, number value] ); // è¯»/å†™æ— ç¬¦å·wordå€¼ï¼Œå¤§ç«¯
+          mkws            ( void* lpmem [, number value] ); // è¯»/å†™æœ‰ç¬¦å·wordå€¼ï¼Œå°ç«¯
+          mkWs            ( void* lpmem [, number value] ); // è¯»/å†™æœ‰ç¬¦å·wordå€¼ï¼Œå¤§ç«¯
+
+          mkd             ( void* lpmem [, number value] ); // è¯»/å†™æ— ç¬¦å·dwordå€¼ï¼Œå°ç«¯
+          mkD             ( void* lpmem [, number value] ); // è¯»/å†™æ— ç¬¦å·dwordå€¼ï¼Œå¤§ç«¯
+          mkds            ( void* lpmem [, number value] ); // è¯»/å†™æœ‰ç¬¦å·dwordå€¼ï¼Œå°ç«¯
+          mkDs            ( void* lpmem [, number value] ); // è¯»/å†™æœ‰ç¬¦å·dwordå€¼ï¼Œå¤§ç«¯
+
+          mkq             ( void* lpmem [, number value] ); // è¯»/å†™æ— ç¬¦å·qwordå€¼ï¼Œå°ç«¯
+          mkQ             ( void* lpmem [, number value] ); // è¯»/å†™æ— ç¬¦å·qwordå€¼ï¼Œå¤§ç«¯
+          mkqs            ( void* lpmem [, number value] ); // è¯»/å†™æœ‰ç¬¦å·qwordå€¼ï¼Œå°ç«¯
+          mkQs            ( void* lpmem [, number value] ); // è¯»/å†™æœ‰ç¬¦å·qwordå€¼ï¼Œå¤§ç«¯
+
+          mkf             ( void* lpmem [, number value] ); // è¯»/å†™floatå€¼ï¼Œå°ç«¯
+          mkF             ( void* lpmem [, number value] ); // è¯»/å†™floatå€¼ï¼Œå¤§ç«¯
+
+          mkdb            ( void* lpmem [, number value] ); // è¯»/å†™doubleå€¼ï¼Œå°ç«¯
+          mkDBs           ( void* lpmem [, number value] ); // è¯»/å†™doubleå€¼ï¼Œå¤§ç«¯
+
+number    bswap           ( number value, number size = 4|8 ); // æŒ‡å®šç¿»è½¬æ•°æ®
+number    bswap_byte      ( number value );
+number    bswap_word      ( number value );
+number    bswap_dword     ( number value );
+number    bswap_qword     ( number value );
+```
+
+---- ---- ---- ----
+
+## HOOK
+
+- æ“ä½œå¤±è´¥ï¼ŒæŠ›å‡ºé”™è¯¯
+
+```
+void*     hook            (
+                          void*     hookmem,
+                          number    hooksize,
+                          string    data_descibe,
+                          string    len_descibe,
+                          bool      logfirst
+                          );
+void*     hook            (
+                          void*     hookmem,
+                          string    data_descibe,
+                          string    len_descibe,
+                          bool      calltable_offset,
+                          bool      logfirst
+                          );
+void      unhook          ( void*   node ); // å½“unhookä¸ç»™nodeå‚æ•°æ—¶ï¼Œå¸è½½å…¨éƒ¨hook
+```
+
+---- ---- ---- ----
+
+## RSA
+
+- RsaKeyæ“ä½œå¤±è´¥ï¼ŒæŠ›å‡ºé”™è¯¯ã€‚åŠ è§£å¯†å¤±è´¥ï¼Œä»…è¿”å›ç©ºä¸²
+- å¡«å……æ¨¡å¼ï¼šPKCS1Padding
+
+```
+private:  RsaKey;
+
+void      RsaKey:__gc               ( );
+string    RsaKey:__tostring         ( );  // è¿”å›"RsaKey*:####"
+
+RsaKey    rsa_open_public_key       ( string filename );
+RsaKey    rsa.pub.open              ( ... );
+
+RsaKey    rsa_set_public_key        ( string rsakey );
+RsaKey    rsa.pub.set               ( ... );
+
+RsaKey    rsa_open_private_key      ( string filename );
+RsaKey    rsa.prv.open              ( ... );
+
+RsaKey    rsa_set_private_key       ( string rsakey );
+RsaKey    rsa.prv.set               ( ... );
+
+string    rsa_public_encrypt        ( string data, RsaKey key );
+string    rsa.pub.enc               ( ... );
+string    string:rsa_pub_enc        ( ... );
+
+string    rsa_public_decrypt        ( string data, RsaKey key );
+string    rsa.pub.dec               ( ... );
+string    string:rsa_pub_dec        ( ... );
+
+
+string    rsa_private_encrypt       ( string data, RsaKey key );
+string    rsa.prv.enc               ( ... );
+string    string:rsa_prv_enc        ( ... );
+
+string    rsa_private_decrypt       ( string data, RsaKey key );
+string    rsa.prv.dec               ( ... );
+string    string:rsa_prv_dec        ( ... );
+```
+
+---- ---- ---- ----
+
+## Base64
+
+- åŠ è§£å¯†å¤±è´¥ï¼Œè¿”å›ç©ºä¸²
+
+```
+string    base64_encode             ( string data );
+string    base64_decode             ( string data );
+string    string:b64_enc            ( );
+string    string:b64_dec            ( );
+```
+
+---- ---- ---- ----
+
+## HMAC
+
+- hmacæ”¯æŒçš„algoæœ‰"sha512/sha256/sha1/md5/sha224/sha384"
+- algoæ— è§†å¤§å°å†™ï¼Œæ— æ³•æ”¯æŒæˆ–è¯†åˆ«æ—¶ï¼ŒæŠ›å‡ºé”™è¯¯
+
+```
+string    hmac                      (
+                                    string    data,
+                                    string    key,
+                                    string    algo
+                                    );
+string    string:hmac               ( ... );
+```
+
+---- ---- ---- ----
+
+## SHA
+
+- SHAæ”¯æŒçš„algoæœ‰ï¼š256 / 512 / 1 / 0 / 224 / 384
+- algoæ— æ³•æ”¯æŒæˆ–è¯†åˆ«æ—¶ï¼ŒæŠ›å‡ºé”™è¯¯
+
+```
+string    sha                       ( string data, number alog = 256 );
+string    string:sha                ( ... );
+
+//ä»¥ä¸‹æ˜¯SHAä¾¿æ·å‡½æ•°ç»„
+string    sha1                      ( string data );
+string    sha224                    ( string data );
+string    sha256                    ( string data );
+string    sha384                    ( string data );
+string    sha512                    ( string data );
+
+string    string:sha1               ( );
+string    string:sha224             ( );
+string    string:sha256             ( );
+string    string:sha384             ( );
+string    string:sha512             ( );
+```
+
+---- ---- ---- ----
+
+## PE
+
+- Lua5.3ä»¥ä¸‹æ— æ³•æ­£ç¡®ä½¿ç”¨æ­¤å‡½æ•°
+
+```
+table     PE              ( number hmod = nullptr );
+table     PE              ( string mod_name );
+
+/*
+  è¿”å›å€¼è§£æå¦‚ä¸‹ï¼š
+  {
+  HMODULE                 hmod,
+  const IMAGE_DOS_HEADER* dos_head,
+  bool                    ispe,
+  const IMAGE_NT_HEADERS* pe_head,
+  void*                   entry,
+  table                   image,
+    {
+    void*                 start,
+    void*                 end,
+    size_t                size,
+    }
+  table                   code,
+    {
+    void*                 start,
+    void*                 end,
+    size_t                size,
+    }
+  }
+*/
+```
+
+---- ---- ---- ----
+
+## UDP
+
+- UDPæ“ä½œå¤±è´¥å°†æŠ›å‡ºå¼‚å¸¸ï¼ŒåŒæ—¶!!é‡Šæ”¾å¯¹è±¡!!
+
+```
+Private:  UDP;
+```
+
+- bind_portä¸ä¸º0æ—¶ï¼Œæ— è§†ipã€portï¼Œç›´æ¥ç»‘å®šæœ¬åœ°ç«¯å£
+- å½“ip == "0.0.0.0"ä¸”port != "0"æ—¶ï¼Œè§†ä¸ºbind_port = portï¼Œä¹Ÿç»‘å®šæŒ‡å®šç«¯å£
+- å½“ip != "0.0.0.0"æ—¶ï¼Œå°†ä¸æŒ‡å®šIPé€šè®¯
+- å½“ä¸ç»‘å®šæœ¬åœ°ç«¯å£æ—¶ï¼Œé»˜è®¤æ¥æ”¶å»¶æ—¶5s
+- ipä¸ºæ•°å€¼æ—¶ï¼Œè§†ä¸ºå¤§ç«¯åºï¼Œå³0x0100007Fè¡¨ç¤º"127.0.0.1"
+```
+UDP       udp_new         (
+                          string|number   ip    = "0.0.0.0",
+                          string|number   port  = "0",
+                          string|number   bind_port = "0"
+                          );
+```
+
+- è·å–æœ¬åœ°/å¯¹ç«¯SOCKä¿¡æ¯
+- è¿”å›IPæ•°å€¼å¤§ç«¯åºï¼Œå³0x0100007Fè¡¨ç¤º"127.0.0.1"
+- æ³¨æ„ï¼šå¯¹è±¡æœªå‘é€ä»»ä½•æ•°æ®å‰ï¼Œè¿”å›çš„æ•°æ®å¯èƒ½ä¸æ­£ç¡®
+```
+string ip, string port, number ip, number port
+          UDP:getsockname ( );
+
+string ip, string port, number ip, number port
+          UDP:getpeername ( );
+```
+
+```
+stirng    UDP:type        ( );  // è¿”å›å¯¹è±¡ç±»å‹ï¼Œå³"UDP"
+void      UDP:close       ( );
+void      UDP:__gc        ( );
+```
+
+- è¿”å›å¦‚ç¤ºï¼šUDP{server/client}:########    local_ip:port >> remote_ip:port
+```
+string    UDP:__tostring  ( );
+```
+
+- æ¥æ”¶å»¶æ—¶ï¼Œæ¯«ç§’è®¡ï¼ˆé»˜è®¤å–æ¶ˆå»¶æ—¶ï¼‰
+```
+UDP       UDP:settimeout  ( number timeout = -1 );
+```
+
+```
+UDP       UDP:broadcast   ( bool set = false );
+```
+
+- å½“ä¸æä¾›ipã€portæ—¶ï¼Œé»˜è®¤è¿æ¥åˆå§‹åŒ–æ—¶æŒ‡å®šçš„IP
+```
+UDP       UDP:send        (
+                          string          data,
+                          string|number   ip    = "0.0.0.0",
+                          string|number   port  = "0"
+                          );
+```
+
+- å½“ä¸æä¾›sizeæ—¶ï¼Œé»˜è®¤æä¾›0x800çš„æ¥æ”¶ç¼“å†²åŒº
+- è¶…æ—¶è¿”å›nil, "timeout"
+- æ¥æ”¶ç¼“å†²åŒºä¸è¶³è¿”å›nil, "msgsize"
+- ç›®æ ‡ä¸å¯è¾¾è¿”å›nil, "unreachable"
+```
+string data, string ip, string port, number ip, number port
+          UDP:recv        ( number size = 0x800 );
+```
+
+---- ---- ---- ----
+
+## TCP
+
+- TCPæ“ä½œå¤±è´¥å°†æŠ›å‡ºå¼‚å¸¸ï¼ŒåŒæ—¶!!é‡Šæ”¾å¯¹è±¡!!
+
+```
+Private:  TCP;
+```
+
+- bind_portä¸ä¸º0æ—¶ï¼Œæ— è§†ipã€portï¼Œç›´æ¥ç»‘å®šæœ¬åœ°ç«¯å£
+- å½“ip == "0.0.0.0"ä¸”port != "0"æ—¶ï¼Œè§†ä¸ºbind_port = portï¼Œä¹Ÿç»‘å®šæŒ‡å®šç«¯å£
+- å½“ip != "0.0.0.0"æ—¶ï¼Œå°†ä¸æŒ‡å®šIPé€šè®¯
+- å½“ä¸ç»‘å®šæœ¬åœ°ç«¯å£æ—¶ï¼Œé»˜è®¤æ¥æ”¶å»¶æ—¶5s
+- ipä¸ºæ•°å€¼æ—¶ï¼Œè§†ä¸ºå¤§ç«¯åºï¼Œå³0x0100007Fè¡¨ç¤º"127.0.0.1"
+- NonBlockConnectè®¾ç½®è¿æ¥æ— é˜»å¡æ¨¡å¼ï¼ˆé»˜è®¤è¿æ¥é˜»å¡ï¼‰
+```
+TCP       tcp_new         (
+                          string|number ip    = "0.0.0.0"
+                          string|number port  = "0",
+                          string|number bind_port = "0",
+                          bool          NonBlockConnect = false
+                          );
+```
+
+- è·å–æœ¬åœ°/å¯¹ç«¯SOCKä¿¡æ¯
+- è¿”å›IPæ•°å€¼å¤§ç«¯åºï¼Œå³0x0100007Fè¡¨ç¤º"127.0.0.1"
+```
+string ip, string port, number ip, number port
+          TCP:getsockname ( );
+
+string ip, string port, number ip, number port
+          TCP:getpeername ( );
+```
+
+```
+stirng    TCP:type        ( );  // è¿”å›å¯¹è±¡ç±»å‹ï¼Œå³"TCP"
+void      TCP:close       ( );
+void      TCP:__gc        ( );
+```
+
+- è¿”å›å¦‚ç¤ºï¼šUDP{server/client}:########    local_ip:port >> remote_ip:port
+```
+string    TCP:__tostring  ( );
+```
+
+- ä»¥ä¸‹å‡½æ•°ï¼ŒServerä¸æ”¯æŒ
+- æ¥æ”¶å»¶æ—¶ï¼Œæ¯«ç§’è®¡ï¼ˆé»˜è®¤å–æ¶ˆå»¶æ—¶ï¼‰
+```
+TCP       TCP:settimeout  ( int timeout = -1 );
+TCP       TCP:broadcast   ( bool set = false );
+TCP       TCP:send        ( string data );
+```
+
+- å½“ä¸æä¾›sizeæ—¶ï¼Œé»˜è®¤æä¾›0x800çš„æ¥æ”¶ç¼“å†²åŒº
+- è¶…æ—¶è¿”å›nil, "timeout"
+```
+string    TCP:recv        ( number size = 0x800 );
+```
+
+- æ£€æµ‹NonBlockConnectçš„TCPæ˜¯å¦è¿æ¥æˆåŠŸï¼ˆæˆåŠŸåï¼Œè‡ªåŠ¨è®¾ç½®é˜»å¡ï¼‰
+```
+bool      TCP:check       ( );
+```
+
+- ä»¥ä¸‹å‡½æ•°ï¼ŒClientä¸æ”¯æŒ
+
+- å½“ä¸æä¾›timeoutæ—¶ï¼Œé»˜è®¤è¶…æ—¶å€¼-1ï¼Œå³é˜»å¡ç›´åˆ°è¿æ¥å‘ç”Ÿ
+- å½“æä¾›timeout(æ¯«ç§’è®¡)æ—¶ï¼Œé˜»å¡æŒ‡å®šæ—¶é—´ï¼Œç›´åˆ°è¿æ¥å‘ç”Ÿæˆ–è¶…æ—¶è¿”å›
+- è¿æ¥å‘ç”Ÿæ—¶ï¼Œè¿”å›æ–°è¿æ¥çš„TCPå¯¹è±¡
+- è¶…æ—¶è¿”å›nil, "timeout"
+```
+TCP       TCP:accept      ( number timeout == -1 );
+```
+
+---- ---- ---- ----
+
+## transip
+
+```
+string    transip         ( number ip, bool bigendian = false ); // æ˜¾ç¤ºç¤ºä¾‹ï¼š127.0.0.1
+string    transip         ( string ip, bool bigendian = false ); // æ˜¾ç¤ºç¤ºä¾‹ï¼š0x7F000001
+```
+---- ---- ---- ----
+
+## dns
+
+- è¿”å›ç¬¬ä¸€ä¸ªtableæ˜¯ipå­—ç¬¦ä¸²åˆ—è¡¨
+- è¿”å›ç¬¬äºŒä¸ªtableæ˜¯ipå€¼åˆ—è¡¨ï¼Œå¤§ç«¯åº
+- å¤±è´¥åˆ™æŠ›å‡ºé”™è¯¯
+
+```
+table, table
+          dns             ( string host );
+```
+
+---- ---- ---- ----
+
+## Windows API
+
+```
+void      Sleep           ( number ms = 0 );    // æš‚åœçº¿ç¨‹msæ¯«ç§’ï¼Œmså…è®¸ä¸ºç©º
+number    GetTickCount    ( );                  // è·å–ç³»ç»Ÿå¯åŠ¨æ—¶é—´æ¯«ç§’æ•°
+        
+// Lua5.3ä»¥ä¸‹æ— æ³•æ­£ç¡®ä½¿ç”¨ä»¥ä¸‹å‡½æ•°
+HMODULE   GetModuleHandle ( string mod_name = "" );
+HMODULE   LoadLibrary     ( string lib_name );  // å¤±è´¥è¿”å›nil, errorcode
+void      FreeLibrary     ( HMODULE mode );     // å¤±è´¥è¿”å›errorcode
+void*     GetProcAddress  ( HMODULE mode, string name );
+```
+
+---- ---- ---- ----
+
+## xhttp
+
+- è®¿é—®é”™è¯¯æ—¶ï¼ŒæŠ›å‡ºé”™è¯¯
+
+```
+/*
+optionsè¡¨å¯ä»¥è®¾ç½®å¦‚ä¸‹å‚æ•°(æ³¨æ„å°å†™åç§°)ï¼š
+  {
+  ["connect_time_out"]  = number;   // è¿æ¥è¶…æ—¶ï¼Œæ¯«ç§’è®¡ï¼Œé»˜è®¤20000ï¼Œå³20s
+  ["time_out"]          = string;   // è®¿é—®è¶…æ—¶ï¼Œæ¯«ç§’è®¡ï¼Œé»˜è®¤10000ï¼Œå³10s
+  ["proxy"]             = string;   // ä»£ç†åœ°å€ï¼Œå¦‚ï¼š"127.0.0.1:8888"
+                                    // æ­¤é¡¹å­˜åœ¨ä¸”ä¸ä¸ºç©ºæ—¶ï¼Œè®¾ç½®ä»£ç†
+  ["data"]              = string;   // postæ•°æ®
+                                    // æ­¤é¡¹å­˜åœ¨æ—¶ï¼Œhttpè®¿é—®ä¸ºpostã€‚å¦åˆ™é»˜è®¤ä¸ºget
+  ["verbose"]           = bool;     // ç»†èŠ‚å±•ç¤ºï¼Œé»˜è®¤falseä¸å±•ç¤º
+  ["header"]            = table;    // http headã€‚ä»¥  [é”®å] = å€¼  å½¢å¼ç»„è¡¨
+  }
+
+ç¤ºä¾‹ä»£ç ï¼š
+
+  local c, h, b = xhttp("http://www.qq.com");
+  for k, v in pairs( h ) do
+    xlog( "key:" .. k, "value:" .. v );
+  end
+
+  local c, h, b = xhttp("http://www.qq.com",
+                        {
+                        connect_time_out = 10000,
+                        time_out = 500,
+                        proxy = "127.0.0.1:8080",
+                        data = "post data",
+                        header =
+                          {
+                          xxx = "xxxx";
+                          }
+                        }
+                       );
+*/
+number response_code, table response_headers, string response_body
+          xhttp                     ( string url, table options = {} );
+```
+
+---- ---- ---- ----
+
+## xlog
+
+- æ— æ¡ä»¶è¾“å‡ºdebugview
+- æ³¨æ„ï¼Œå¦‚æœåœ¨åŠ è½½å‰æ­¤å‡½æ•°è¢«é¢„å®šä¹‰ï¼Œåˆ™ä½¿ç”¨é¢„å®šä¹‰
+```
+void      xlog            ( ... );
+```
+
+- æ­¤å‡½æ•°ç”¨äºåœ¨xlogè¢«æ›¿æ¢çš„æƒ…å†µä¸‹ï¼Œè¿˜å¯é€‰æ‹©è¾“å‡ºåˆ°debugview
+```
+void      dbgview         ( ... );
+```
+
+xlog_levelç”¨äºæ§åˆ¶è¾“å‡º
+
+- "off"       // å±è”½è¾“å‡º
+- "fatal"     // è‡´å‘½é”™è¯¯ï¼Œç¨‹åºæ— æ³•ç»§ç»­æ‰§è¡Œ
+- "error"     // åæ˜ é”™è¯¯ï¼Œä¾‹å¦‚ä¸€äº›APIçš„è°ƒç”¨å¤±è´¥
+- "warn"      // åæ˜ æŸäº›éœ€è¦æ³¨æ„çš„å¯èƒ½æœ‰æ½œåœ¨å±é™©çš„æƒ…å†µï¼Œå¯èƒ½ä¼šé€ æˆå´©æºƒæˆ–é€»è¾‘é”™è¯¯ä¹‹ç±»
+- "info"      // è¡¨ç¤ºç¨‹åºè¿›ç¨‹çš„ä¿¡æ¯
+- "debug"     // æ™®é€šçš„è°ƒè¯•ä¿¡æ¯ï¼Œè¿™ç±»ä¿¡æ¯å‘å¸ƒæ—¶ä¸€èˆ¬ä¸è¾“å‡º
+- "trace"     // æœ€ç²¾ç»†çš„è°ƒè¯•ä¿¡æ¯ï¼Œå¤šç”¨äºå®šä½é”™è¯¯ï¼ŒæŸ¥çœ‹æŸäº›å˜é‡çš„å€¼
+- "on"        // å…¨è¾“å‡ºï¼ˆé»˜è®¤ï¼‰
+```
+string    xlog_level;
+```
+
+- æ ¹æ®xlog_levelçš„åŠ¨æ€è°ƒè¯•ç­‰çº§ï¼Œå†³å®šæ˜¯å¦è¾“å‡ºä¿¡æ¯
+- å‡½æ•°ç»„åº•å±‚è°ƒç”¨xlogè¾“å‡ºä¿¡æ¯ï¼Œä¿®æ”¹xlogå‡½æ•°èƒ½å®ç°ä¿¡æ¯è½¬å‘
+```
+void      xfail           ( ... );
+void      xerr            ( ... );
+void      xwarn           ( ... );
+void      xinfo           ( ... );
+void      xdbg            ( ... );
+void      xtrace          ( ... );
+```
+- å°†ä¿¡æ¯è¾“å‡ºå‡½æ•°ç»„åŠ å…¥stringè¡¨
+```
+void      stirng:xlog     ( ... );
+void      stirng:xfail    ( ... );
+void      string:xerr     ( ... );
+void      string:xwarn    ( ... );
+void      string:xinfo    ( ... );
+void      string:xdbg     ( ... );
+void      string:xtrace   ( ... );
+```
+
+---- ---- ---- ----
+
+## zlib
+
+- å‹ç¼©/è§£å‹å¤±è´¥ï¼Œè¿”å›nil & é”™è¯¯ç 
+
+```
+string    zlib_compress   ( string data );
+string    zlib_uncompress ( string data );
+string    string:zcp      ( );
+string    string:zup      ( );
+```
+
+---- ---- ---- ----
+
+## gzip
+
+- å‹ç¼©/è§£å‹å¤±è´¥ï¼Œè¿”å›nil & é”™è¯¯ä¿¡æ¯
+- gzipè§£å‹æ—¶ï¼Œå°è¯•å¸¦head/ä¸å¸¦headçš„gzipè§£å‹ï¼Œä»¥åŠdeflateè§£å‹
+
+```
+string    gzip_compress   ( string data );
+string    gzip_uncompress ( string data );
+string    string:gzcp     ( );
+string    string:gzup     ( );
+```
+
+-------- -------- -------- --------
+         ½âÎöµÈ¼¶¿ØÖÆ
+-------- -------- -------- --------
+
+¡ñ
+  string      main_analysis_level = "detail"; --È«¾Ö½âÎöµÈ¼¶¿ØÖÆ£¬Ä¬ÈÏÏ¸¶È×î¸ß
+
+    --½âÎöµÈ¼¶ÓĞ"simple"|"more"|"complex"|"detail"£¬½âÎöÏ¸¶ÈÖğ²ãÌáÉı£¬½âÎöĞ§ÂÊÖğ²ãÏÂ½µ
+    --½âÎöµÈ¼¶ÔÊĞí¼òĞ´£º"s|m|c|d|S|M|C|D"
+    
+¡ñ
+  table       analysis_level_tables =    
+    {
+    simple  = 1,        s = 1,
+    more    = 2,        m = 2,
+    complex = 3,        c = 3,
+    detail  = 4,        d = 4,
+    };                                  --µÈ¼¶Öµ×ª»»
+
+  --Ìá¹©¼òĞ´¼ÓËÙ½âÎö    
+  const int   alvlS = analysis_level_tables.simple;
+  const int   alvlM = analysis_level_tables.more;
+  const int   alvlC = analysis_level_tables.complex;
+  const int   alvlD = analysis_level_tables.detail;
+
+-------- -------- -------- --------
+         ×Ô¶¨Òå¸ñÊ½»¯
+-------- -------- -------- --------
+--FormatExÌá¹©Í¨ÓÃµÄ×Ô¶¨Òå¸ñÊ½»¯²Ù×÷£¬±»TreeAddExÊ¹ÓÃ
+
+¡ñ
+  uint8;              --0x00(0)                     1 byte
+  uint16;             --0x0000(0)                   2 byte
+  uint24;             --0x000000(0)                 3 byte
+  uint32;             --0x00000000(0)               4 byte
+  uint64;             --0x0000000000000000(0)       8 byte
+  int8;               --0x00(0)                     1 byte
+  int16;              --0x0000(0)                   2 byte
+  int24;              --0x000000(0)                 3 byte
+  int32;              --0x00000000(0)               4 byte
+  int64;              --0x0000000000000000(0)       8 byte
+
+  bool;               --true|false                  1 byte
+  ipv4;               --hostname(0.0.0.0)           4 byte
+                        0.0.0.0         //µ±hostnameÎŞ·¨È·¶¨Ê±£¬ÏÔÊ¾
+  ipv4_port;          --hostname:port(0.0.0.0:0)    6 byte
+                        0.0.0.0:0       //µ±hostnameÎŞ·¨È·¶¨Ê±£¬ÏÔÊ¾
+                        
+  xipv4_port;         --hostname:port(0.0.0.0:0)    6 byte
+                        0.0.0.0:0       //µ±hostnameÎŞ·¨È·¶¨Ê±£¬ÏÔÊ¾
+                                        //×Ö½ÚË³ĞòÓÃÓÚ±êÊ¾port£¬×¢ÒâipµÄ×Ö½ÚÓëportÏà·´
+  float;              --0.0             //ÎŞÊÓ´óĞ¡¶Ë
+  string;             --00000           //size == -1Ê±£¬È¡Ê£ÓàËùÓĞÊı¾İ
+                                        //×¢Òâ³ıÁË-1£¬ÆäÓà¸ºÖµ½«³ö´í
+                                        //×¢ÒâÕıÖµ³¬¹ıtvb·¶Î§Ò²³ö´í
+                                        //×¢Òâsize==0£¬¿ÉÒÔ¹ÊÒâ²åÈëÒ»¸ötree
+  bytes;              --000000          //size == -1Ê±£¬È¡Ê£ÓàËùÓĞÊı¾İ
+
+  stringz;                              //²»½ÓÊÜÖ¸¶¨size£¬Óö\0½Ø¶Ï(°üº¬\0)£¬·ñÔòÈ¡Ê£ÓàËùÓĞÊı¾İ
+
+  //xline±íÊ¾head²»°üº¬×ÔÉí´óĞ¡
+  bxline_string;      bline_string;                 1 + N byte
+  wxline_string;      wline_string;                 2 + N byte
+  dxline_string;      dline_string;                 4 + N byte
+
+  bxline_bytes;       bline_bytes;                  1 + N byte
+  wxline_bytes;       wline_bytes;                  2 + N byte
+  dxline_bytes;       dline_bytes;                  4 + N byte
+
+  xdate               --0000/00/00 00:00:00         4 byte
+  xtime               --00day 00:00:00              4 byte
+  xcapacity           --0.00T|0.00G|0.00M|0.00K|0.00B       N byteĞèÖ¸¶¨
+
+  ×¢Òâ£¬µ±string»òbytesÀàĞÍÊı¾İ¹ı´óÊ±£¬»á·µ»ØµÚÈı¸öÊı¾İ½Ø¶Ï½á¹û£¬Èç0000...
+
+-------- -------- -------- --------
+         ProtoFieldEx²Ù×÷
+-------- -------- -------- --------
+
+¡ñ
+    table protofieldsex, table protofields
+              ProtoFieldEx              (
+                                        [ string proto_pre_fix, ]
+                                        table fields
+                                        );                                [-1|2, +2, v]
+        --½¨Á¢×Ô¶¯¶ÔÆë¸ñÊ½»¯µÄField±í
+        --·µ»ØµÚÒ»¸ö±íÓÃÓÚÓëTreeAddExÅäºÏÊ¹ÓÃ£¬¼ò»¯ÔªËØÌí¼Ó
+          {
+          ["__fmt"] = fmt;
+          [short_addr] = { type, field, exfunc },
+          ...
+          }
+        --·µ»ØµÚ¶ş¸ö±íÓÃÓÚproto.fieldsµÄ¸³Öµ
+          {
+          [short_addr] = field,
+          ...
+          }
+        --²ÎÊıproto_pre_fixÓÃÓÚÌí¼ÓabbrÇ°×º£¨Ç¿ÁÒ½¨ÒéÌí¼ÓÖ®£©
+        --fieldsµÄ¹æÔòÈçÏÂ£º
+          {
+            { func,         short_abbr,     name,         ... },
+            ...
+          };
+          nameÔÊĞíÎªnil£¬´ËÊ±£¬nameÄ¬ÈÏÊ¹ÓÃshort_abbrµÄÄÚÈİ
+        --º¯ÊıÔ¤ÏÈÉ¨ÃèÈ«±í£¬ÌáÈ¡short_abbrÓëname¸÷×Ô×î´ó³¤¶È£¬Éè¶¨¶ÔÆë¸ñÊ½£¬ÖØĞÂÉú³Éfix_name
+          "%-##s    %-##s    "
+        --¶ÔÓÚ±íÖĞÃ¿¸öÔªËØ£¬º¯Êı½«ÎªÖ®Éú³É
+            field = ProtoField[ func ]( proto_pre_fix .. short_abbr, fix_name, ... );
+          µ±funcÎ´ÄÜÊ¶±ğÊ±£¬Ä¬ÈÏÊ¹ÓÃstring
+          ÔÊĞífuncÎªFormatExµÄ×Óº¯ÊıÃû£¬µ«Èç¹û²»ÊÇ×Óº¯ÊıÃûÊ±£¬Ä¬ÈÏÈÔÎªstring
+          µ«ÔÚTreeAddExÊ±£¬´¦Àí²»Í¬
+          Èç£º
+          { "wxline_string", "wxline_msg", "MSG" }  --wxline_msg±»´¦Àí³Éstring
+        --funcÎŞÊÓ´óĞ´£¬Ò»ÂÉ×ª»»³ÉĞ¡Ğ´¸ñÊ½
+        --º¯Êı×Ô¶¯ÔÚ±íÇ°Ìí¼ÓÈçÏÂÄ¬ÈÏÔªËØ
+          {
+            { "uint8",      "xxoo_b",     "Byte",    base.HEX_DEC },
+            { 'uint16',     "xxoo_w",     "Word",    base.HEX_DEC },
+            { 'uint32',     "xxoo_d",     "Dword",   base.HEX_DEC },
+            { 'uint64',     "xxoo_q",     "Qword",   base.HEX_DEC },
+            { 'bytes',      "xxoo_a",     "Array"                 },
+            { "string",     "xxoo_s",     "String"                },
+          };
+        --±íÔªËØ====ÔÊĞí¸²¸ÇÖ®===
+        --!!!!º¯Êı´¦Àífix_nameÊ±£¬ÒÔUTF8¸ñÊ½´¦Àí×Ö·û´®£¬ÒªÇóshort_abbrÓëname±ØĞëÎªUTF8!!!!
+        --fieldsµÄfuncÔÊĞí¼òĞ´£º          
+          {
+          b   = "uint8",
+          w   = "uint16",
+          d   = "uint32",
+          q   = "uint64",
+          a   = "bytes",
+          s   = "string",
+          }
+
+-------- -------- -------- --------
+         TreeAddEx²Ù×÷
+-------- -------- -------- --------
+
+¡ñ
+    int       TreeAddEx                 (
+                                        table     protofieldsex,
+                                        TreeItem  root,
+                                        Tvb       tvb,
+                                        int       off,
+                                        ...
+                                        );                                 [-4+, +1, v]
+        --¸ù¾İÒªÇó×Ô¶¯Éú³ÉÊ÷ÔªËØ
+        --protofieldsexÎªProtoFieldEx·µ»ØµÄµÚÒ»¸ö±í
+        --²»¶¨²ÎÒÔ short_abbr, [size|format_function,] short_abbr, ... ĞÎÊ½Ìá¹©
+          µ±²»Ìá¹©size»òformat_functionÊ±£¬Ê¹ÓÃÄ¬ÈÏ³¤¶È
+          µ±Ö¸¶¨fieldÎ´ÓĞÄ¬ÈÏ³¤¶ÈÊ±£¬Ê¹ÓÃÊ£ÓàµÄËùÓĞÊı¾İ
+          µ±Ö¸¶¨size <= 0Ê±£¬Ìø¹ı²»´¦Àí
+          Ä¬ÈÏ³¤¶ÈÁĞ±íÈçÏÂ£º          
+            {
+            uint8     = 1,
+            uint16    = 2,
+            uint24    = 3,
+            uint32    = 4,
+            uint64    = 8,
+            int8      = 1,
+            int16     = 2,
+            int24     = 3,
+            int32     = 4,
+            int64     = 8,
+
+            framenum  = 4,
+            bool      = 1,
+            absolute_time = 4,
+            relative_time = 4,
+
+            ipv4      = 4,
+            ipv6      = 16,
+            ether     = 6,
+            float     = 4,
+            double    = 8,
+            };
+        --abbr_nameµÄµÚÒ»¸ö×Ö·ûÔÊĞíÎª'<'»ò'>'£¬ÓÃÓÚ±êÊ¾fieldµÄ´óĞ¡¶Ë£¬Ä¬ÈÏ´ó¶Ë
+        --abbr_nameÔÊĞíÒÔ¿Õ¸ñ·Ö¸ô×¢ÊÍ¡£¿Õ¸ñÒÔºóµÄËùÓĞÊı¾İ±»ÈÏÎªÊÇ×¢ÊÍ¶øÎŞÊÓÖ®
+        --º¯Êı·µ»Ø´¦Àí½áÊøºóµÄoff
+        --µ±Ìá¹©format_functionÊ±£¬º¯ÊıÒÔÈçÏÂĞÎÊ½µ÷ÓÃ
+          format_function( buf, off, nil, tree_add_func, root, field );
+          Èç¹ûµ÷ÓÃÄÚ²¿Ê¹ÓÃÁËtree_add_func£¬Ó¦·µ»Øoff + size
+          ·ñÔòÓ¦·µ»Øformatted_string, size¡£
+          ´¦Àí½«ÔÚÆäºó×Ô¶¯µ÷ÓÃtree_add_func( root, field, buf( off, size ), formatted_string );
+
+        --ÔÊĞíÖ¸¶¨abbr_nameÔÚprotofieldsexÖĞÎŞÆ¥Åä£¬´ËÊ±ÓĞÈçÏÂ¹æÔò
+          --µ±Ìá¹©format_functionÊ±£¬º¯ÊıÒÔÈçÏÂĞÎÊ½µ÷ÓÃ
+            format_function( buf, off, nil, tree_add_func, root, field );
+            Èç¹ûµ÷ÓÃÄÚ²¿Ê¹ÓÃÁËtree_add_func£¬Ó¦·µ»Øoff + size
+            ·ñÔòÓ¦·µ»Øformatted_string, size¡£
+            ´¦Àí½«ÔÚÆäºó×Ô¶¯µ÷ÓÃtree_add_func( root, buf( off, size), prefix_string .. formatted_string );
+          --·ñÔò±ØĞëÔÚ¿Õ¸ñºóÖ¸¶¨ÀàĞÍ£¬Ö§³ÖÀàĞÍ²Î¿¼FormatEx
+
+        ex:
+          off = TreeAddEx( fieldsex, root, tvb, off,
+            "xxoo_b",                   --¿ÉÊ¶±ğµÄshort_abbr£¬ÇÒ¿ÉÊ¶±ğ³¤¶È
+            "xx", 2,                    --Ç¿ÖÆ³¤¶È
+            "xxoo_s", format_xxx        --¿ÉÊ¶±ğµÄshort_abbr£¬µ«²»¿ÉÊ¶±ğ³¤¶È£¬ĞèÒª×Ô¶¨Òå¸ñÊ½»¯
+            );
+          --Éú³ÉĞ§¹û´óÖÂÈçÏÂ£º
+          xxoo_b        Byte      :0x00
+          xx            xx        :0x0000(0)
+          xxoo_s        String    :xxxxxxxx
+
+        ex:
+          TreeAddEx( fieldsex, root, tvb, off,
+            "*xxoo_b uint8",            --Ö¸¶¨¿ÉÊ¶±ğµÄÖ§³ÖÀàĞÍ£¬²»ÓÃºóĞøÖ¸¶¨´óĞ¡
+            "*xxoo_s string", 6,        --Ö§³ÖÀàĞÍ¿ÉÊ¶±ğ£¬µ«Ç¿ÖÆÖ¸¶¨´óĞ¡
+            "*xxoo_a", 5                --²»Ö¸¶¨ÀàĞÍ£¬Ä¬ÈÏbytes
+            );
+          --Éú³ÉĞ§¹û´óÖÂÈçÏÂ£º
+          -             *xxoo_b   :0x00(0)
+          -             *xxoo_s   :xxxxxx
+          -             *xxoo_a   :##########
