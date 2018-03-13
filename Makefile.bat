@@ -16,12 +16,9 @@
     set GPATH=%MyPath%\\%PLAT%
 
     set CC=cl
-    set AR=lib
     set LNK=link
 
     set LuaBasePath=%MyPath%..\\Lua
-    set DestLua=xlua.lua
-    set DestCmt=xlua.txt
     set LuaExe=%LuaBasePath%\\%PLAT%\\lua
     set xluaBasePath=%MyPath%\\..\\xlualib
 
@@ -48,7 +45,11 @@
     set LFLAGS=%LFLAGS% /LIBPATH:"..\\curl\\%PLAT%" /LIBPATH:"..\\openssl\\%PLAT%" /LIBPATH:"..\\zlib\\%PLAT%" /LIBPATH:"..\\xlib\\%PLAT%"
 
 :start
-    echo ==== ==== ==== ==== Start compiling %PLAT%...
+    echo ==== ==== ==== ==== Prepare dest folder(%PLAT%)...
+
+    rd /S /Q "%GPATH%" >nul
+    if exist "%GPATH%" goto fail
+    mkdir "%GPATH%" >nul
 
     echo ==== ==== ==== ==== Prepare environment(%PLAT%)...
     cd /d %VCPATH%
@@ -58,24 +59,23 @@
         call vcvarsall.bat x86 >nul
     )
 
-    echo ==== ==== ==== ==== Prepare dest folder(%PLAT%)...
-    if not exist "%GPATH%" mkdir %GPATH%
-    del /q "%GPATH%\\*.*"
-
     cd /d %VPATH%
 
 :packlua
     echo ==== ==== ==== ==== Packing lua(%PLAT%)...
+
     "%LuaExe%" "%xluaBasePath%\\Pack.lua" "%xluaBasePath%\\Lua" "%VPATH%\\ExtendScript" "%VPATH%\\xlua.lua" "%VPATH%\\xlua.md" >nul
-    if not %errorlevel%==0 goto compile_error
+    if not %errorlevel%==0 goto fail
 
 :res
     echo ==== ==== ==== ==== Building Resource(%PLAT%)...
+    
     rc /D "_UNICODE" /D "UNICODE" /l 0x0409 /nologo /fo"%GPATH%\\xlualib.res" "%xluaBasePath%\\xlualib.rc" >nul
     if not %errorlevel%==0 goto compile_error
 
 :dll
     echo ==== ==== ==== ==== Building DLL(%PLAT%)...
+
     %CC% %CFLAGS% %MyCFLAGS% %DllCFLAGS% /Fd"%GPATH%\\lua52.pdb" "%VPATH%\\src\\*.c" "%xluaBasePath%\\*.cc" "%VPATH%\\*.cc" >nul
     if not %errorlevel%==0 goto compile_error
 
@@ -93,19 +93,19 @@
     %LNK% /OUT:"%GPATH%\\lua.exe" %LFLAGS% %LFLAGS_PLAT_CONSOLE% "%GPATH%\\lua52.lib" "%GPATH%\\lua.obj" >nul
     if not %errorlevel%==0 goto link_error
 
+    del "%VPATH%\\xlua.lua"
     del "%GPATH%\\*.obj"
     del "%GPATH%\\*.res"
-    del "%VPATH%\\xlua.lua"
 
 :test
     echo ==== ==== ==== ==== Testing(%PLAT%)...
+
     cd "%GPATH%"
     lua -e "print( ([[AABBCC]]):show() )" >nul
-    if not %errorlevel%==0 goto link_error
+    if not %errorlevel%==0 goto fail
 
 :done
     echo.
-
     endlocal
 
     if "%1" == "" (
@@ -115,7 +115,6 @@
     )
 
     echo done.
-
     goto end
 
 :compile_error
@@ -124,6 +123,10 @@
 
 :link_error
     echo !!!!!!!!Link error!!!!!!!!
+    goto end
+
+:fail
+    echo !!!!!!!!Fail!!!!!!!!
     goto end
 
 :end
