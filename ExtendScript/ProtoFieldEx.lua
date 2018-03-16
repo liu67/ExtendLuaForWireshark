@@ -1,67 +1,86 @@
---[=======[
--------- -------- -------- --------
-         ProtoFieldEx≤Ÿ◊˜
--------- -------- -------- --------
-]=======]
+Ôªø--[=======[
+---- ---- ---- ----
 
---[=======[
-°Ò
-    table protofieldsex, table protofields
-              ProtoFieldEx              (
-                                        [ string proto_pre_fix, ]
-                                        table fields
-                                        );                                [-1|2, +2, v]
-        --Ω®¡¢◊‘∂Ø∂‘∆Î∏Ò ΩªØµƒField±Ì
-        --∑µªÿµ⁄“ª∏ˆ±Ì”√”⁄”ÎTreeAddEx≈‰∫œ π”√£¨ºÚªØ‘™ÀÿÃÌº”
-          {
-          ["__fmt"] = fmt;
-          [short_addr] = { type, field, exfunc },
-          ...
-          }
-        --∑µªÿµ⁄∂˛∏ˆ±Ì”√”⁄proto.fieldsµƒ∏≥÷µ
-          {
-          [short_addr] = field,
-          ...
-          }
-        --≤Œ ˝proto_pre_fix”√”⁄ÃÌº”abbr«∞◊∫£®«ø¡“Ω®“ÈÃÌº”÷Æ£©
-        --fieldsµƒπÊ‘Ú»Áœ¬£∫
-          {
-            { func,         short_abbr,     name,         ... },
-            ...
-          };
-          name‘ –ÌŒ™nil£¨¥À ±£¨nameƒ¨»œ π”√short_abbrµƒƒ⁄»›
-        --∫Ø ˝‘§œ»…®√Ë»´±Ì£¨Ã·»°short_abbr”Îname∏˜◊‘◊Ó¥Û≥§∂»£¨…Ë∂®∂‘∆Î∏Ò Ω£¨÷ÿ–¬…˙≥…fix_name
-          "%-##s    %-##s    "
-        --∂‘”⁄±Ì÷–√ø∏ˆ‘™Àÿ£¨∫Ø ˝Ω´Œ™÷Æ…˙≥…
-            field = ProtoField[ func ]( proto_pre_fix .. short_abbr, fix_name, ... );
-          µ±funcŒ¥ƒ‹ ∂± ±£¨ƒ¨»œ π”√string
-          ‘ –ÌfuncŒ™FormatExµƒ◊”∫Ø ˝√˚£¨µ´»Áπ˚≤ª «◊”∫Ø ˝√˚ ±£¨ƒ¨»œ»‘Œ™string
-          µ´‘⁄TreeAddEx ±£¨¥¶¿Ì≤ªÕ¨
-          »Á£∫
-          { "wxline_string", "wxline_msg", "MSG" }  --wxline_msg±ª¥¶¿Ì≥…string
-        --funcŒﬁ ”¥Û–¥£¨“ª¬…◊™ªª≥…–°–¥∏Ò Ω
-        --∫Ø ˝◊‘∂Ø‘⁄±Ì«∞ÃÌº”»Áœ¬ƒ¨»œ‘™Àÿ
-          {
-            { "uint8",      "xxoo_b",     "Byte",    base.HEX_DEC },
-            { 'uint16',     "xxoo_w",     "Word",    base.HEX_DEC },
-            { 'uint32',     "xxoo_d",     "Dword",   base.HEX_DEC },
-            { 'uint64',     "xxoo_q",     "Qword",   base.HEX_DEC },
-            { 'bytes',      "xxoo_a",     "Array"                 },
-            { "string",     "xxoo_s",     "String"                },
-          };
-        --±Ì‘™Àÿ====‘ –Ì∏≤∏«÷Æ===
-        --!!!!∫Ø ˝¥¶¿Ìfix_name ±£¨“‘UTF8∏Ò Ω¥¶¿Ì◊÷∑˚¥Æ£¨“™«Ûshort_abbr”Îname±ÿ–ÎŒ™UTF8!!!!
-        --fieldsµƒfunc‘ –ÌºÚ–¥£∫          
-          {
-          b   = "uint8",
-          w   = "uint16",
-          d   = "uint32",
-          q   = "uint64",
-          a   = "bytes",
-          s   = "string",
-          }
+## Wireshark ProtoFieldExÂáΩÊï∞
+
+ÂáΩÊï∞Áî®‰∫éÂª∫Á´ãËá™Âä®ÂØπÈΩêÊ†ºÂºèÂåñÁöÑFieldË°®ÔºåÂÆö‰πâÂ¶Ç‰∏ãÔºö
+```
+table protofieldsex, table protofields
+          ProtoFieldEx              (
+                                    [ string abbr_pre_fix, ]
+                                    table fields
+                                    );
+```
+
+- ÂèÇÊï∞abbr_pre_fixÁî®‰∫éÊ∑ªÂä†abbrÂâçÁºÄÔºàÂº∫ÁÉàÂª∫ËÆÆÊ∑ªÂä†‰πãÔºâ
+- fieldsÊ†ºÂºèÂ¶Ç‰∏ãÔºö
+```
+  {
+    { func,         short_abbr,     name,         ... },
+    ...
+  };
+```
+- fieldsÁöÑËßÑÂàôÂ¶Ç‰∏ãÔºö
+    - nameÂÖÅËÆ∏‰∏∫nilÔºåÊ≠§Êó∂Ôºånam = short_abbr
+    - func‰ºòÂÖàËØÜÂà´‰∏∫ProtoFieldÊîØÊåÅÁöÑÁ±ªÂûãÂêç
+    - funcÂÖÅËÆ∏‰∏∫FormatExÁöÑÂ≠êÂáΩÊï∞ÂêçÔºåÁî®‰∫éËá™ÂÆö‰πâÊ†ºÂºèÂåñÔºå‰ΩÜÊ≠§Êó∂field‰∏ÄÂæãË¢´ÂÆö‰πâ‰∏∫string
+    - funcÊó†ËßÜÂ§ßÂÜôÔºå‰∏ÄÂæãËΩ¨Êç¢ÊàêÂ∞èÂÜôÊ†ºÂºè
+    - funcÊú™ËÉΩËØÜÂà´Êó∂ÔºåÊäõÂá∫ÈîôËØØ
+    - short_abbr‰∏énameÂøÖÈ°ª‰∏∫UTF8
+    - funcÊîØÊåÅÂ¶Ç‰∏ãÁÆÄÂÜôÔºö
+```
+  {
+  b   = "uint8",
+  w   = "uint16",
+  d   = "uint32",
+  q   = "uint64",
+  a   = "bytes",
+  s   = "string",
+  }
+```
+- Â≠òÂú®ÂÖ®Â±ÄÊ†ºÂºèÂåñËÆæÂÆöÔºåÊ≠§ËÆæÂÆöÂ∞ÜÂΩ±ÂìçÊï∞ÊçÆÊòæÁ§∫Ê†ºÂºè
+- Ê≥®ÊÑèÔºö‰∏¥Êó∂‰øÆÊîπÊ≠§ËÆæÂÆöÂ∞ÜÊó†Ê≥ïÂΩ±ÂìçÈ¢ÑÂÆö‰πâÁöÑFieldÊ†ºÂºè
+```
+ShowFieldFormat = "%-20s  ";
+```
+- ÂØπ‰∫éË°®‰∏≠ÊØè‰∏™ÂÖÉÁ¥†ÔºåÂáΩÊï∞Â∞Ü‰∏∫‰πãÁîüÊàê
+```
+  field = ProtoField[ func ]( abbr_pre_fix .. short_abbr,
+      string.format( ShowFieldFormat, short_abbr, name ), ... );
+```
+- ËøîÂõûÁ¨¨‰∏Ä‰∏™Ë°®`protofieldsex`ÔºåÁî®‰∫é‰∏éTreeAddExÈÖçÂêà‰ΩøÁî®ÔºåÁÆÄÂåñÂÖÉÁ¥†Ê∑ªÂä†
+```
+  {
+  [short_addr] =
+    {
+      types,  --‰∏ÄËà¨Áî®‰∫éÁ°ÆËÆ§ÈªòËÆ§Â§ßÂ∞è
+      field,
+      exfunc,--Ê≠§È°πÂ≠òÂú®Êó∂ÔºåË°®Á§∫ÈúÄË¶ÅË∞ÉÁî®Ëá™ÂÆö‰πâÊ†ºÂºèÂåñ
+    },
+  ...
+  }
+```
+- ËøîÂõûÁ¨¨‰∫å‰∏™Ë°®Áî®‰∫éproto.fieldsÁöÑËµãÂÄº
+```
+  {
+  [short_addr] = field,
+  ...
+  }
+```
+- Â≠òÂú®Â¶Ç‰∏ã**ÂÖ®Â±ÄField**ÔºöÔºà‰ΩøÁî®ÂÖ®Â±ÄÂáΩÊï∞`get_default_fieldsex()`Ëé∑ÂèñÊ≠§Ë°®Ôºâ
+```
+  {
+    { "uint8",      "xxoo_b",     "Byte",    base.HEX_DEC },
+    { 'uint16',     "xxoo_w",     "Word",    base.HEX_DEC },
+    { 'uint32',     "xxoo_d",     "Dword",   base.HEX_DEC },
+    { 'uint64',     "xxoo_q",     "Qword",   base.HEX_DEC },
+    { 'bytes',      "xxoo_a",     "Bytes"                 },
+    { "string",     "xxoo_s",     "String"                },
+    { 'bytes',      "xxoo_x",     "unsolved"              },
+  };
+```
 ]=======]
---¥À±Ì”√”⁄¥¶¿ÌºÚ–¥
+--Ê≠§Ë°®Áî®‰∫éÂ§ÑÁêÜÁÆÄÂÜô
 local ProtoFieldShort =
   {
   b   = "uint8",
@@ -72,94 +91,114 @@ local ProtoFieldShort =
   s   = "string",
   };
 
-function ProtoFieldEx( arg1, arg2 )
-  --’‚∏ˆ±Ì◊™“∆Ω¯¿¥ «Œ™¡À‘⁄∑«wiresharkª∑æ≥œ¬≥ı ºªØ ±≤ª≥ˆ¥Ì
-  local ProtoFieldDefault =
+local default_fieldsex;
+function get_default_fieldsex()
+  if default_fieldsex then
+    return default_fieldsex;
+  end
+
+  local FieldDefault =
     {
       { "uint8",      "xxoo_b",     "Byte",       base.HEX_DEC },
       { 'uint16',     "xxoo_w",     "Word",       base.HEX_DEC },
       { 'uint32',     "xxoo_d",     "Dword",      base.HEX_DEC },
       { 'uint64',     "xxoo_q",     "Qword",      base.HEX_DEC },
-      { 'bytes',      "xxoo_a",     "Array"                    },
+      { 'bytes',      "xxoo_a",     "Bytes"                    },
       { "string",     "xxoo_s",     "String"                   },
+      { 'bytes',      "xxoo_x",     "unsolved"                 },
     };
-  --≤Œ ˝ ∂±
+  default_fieldsex = {};
+  local fields = {};
+  for _, tb in pairs( FieldDefault ) do
+    local func, abbr, name = table.unpack( tb );
+    local types = func;
+
+    func = rawget( ProtoField, func );
+    name = string.format( ShowFieldFormat, name );
+
+    local field;
+    if #tb > 3 then
+      field = func( abbr, name, select( 4, table.unpack( tb ) ) );
+    else
+      field = func( abbr, name );
+    end
+
+    fields[ abbr ] = field;
+    default_fieldsex[ abbr ] = { types = types, field = field };
+  end
+
+  --ÈúÄË¶ÅÊ≥®ÂÜåÔºåÂê¶Âàô‰∏çÂèØÁî®
+  local proto = Proto( "ExtendLuaForWireshark", "ExtendLuaForWireshark" );
+  proto.fields = fields;
+
+  return setmetatable( default_fieldsex,
+    {
+    __newindex = function() return error( "default_fieldsexÁ¶ÅÊ≠¢‰øÆÊîπ" ); end
+    }
+    );
+end
+
+ShowFieldFormat = "%-20s  ";
+
+function ProtoFieldEx( arg1, arg2 )
+  --ÂèÇÊï∞ËØÜÂà´
   local pre_fix, fields;
   if type( arg2 ) == "table" then
-    pre_fix = arg1;
+    pre_fix = arg1 or "";
     fields = arg2;
   else
+    pre_fix = arg2 or "";
     fields = arg1;
-    pre_fix = arg2;
-  end
-  pre_fix = pre_fix or "";
-
-  --∏¥÷∆£¨±‹√‚∫Û√Ê∂‘‘≠ ºfields±Ìµƒ–ﬁ∏ƒ
-  local fs = {};
-  for k, t in pairs( fields ) do
-    fs[ k ] = { table.unpack( t ) };
-  end
-  fields = fs;
-
-  --≤Â»Îƒ¨»œ±Ì
-  for _, tb in pairs( ProtoFieldDefault ) do
-    table.insert( fields, 1, tb );
   end
 
-  --»•≥˝÷ÿ∏¥£¨abbr_name±ª÷ÿ‘ÿµƒ«Èøˆœ¬£¨“‘◊Ó∫Û“ª∏ˆŒ™◊º
-  local fs = {};
-  for k, tb in pairs( fields ) do
-    fs[ tb[ 2 ] ] = k;
-  end
-  
-  --œ»ªÒ»°abbr”Înameµƒ◊Ó¥Û≥§∂»£¨”√”⁄∂‘∆Îœ‘ æ
-  local abbr_max = 16;
-  local name_max = 16;
-
-  for _, k in pairs( fs ) do
-    local arg = fields[ k ];
-    if #arg[ 2 ] > abbr_max then        --abbr±ÿ–Î“™”–
-      abbr_max = #arg[ 2 ];
-    end
-    if arg[ 3 ] then                    --name‘ –Ì√ª”–
-      arg[ 3 ] = utf82s( arg[ 3 ] );
-      if #arg[ 3 ] > name_max then      --¥¶¿Ìutf8”Îasciiµƒ≥§∂»≤Ó“Ï
-        name_max = #arg[ 3 ];
-      end
-    end
-  end
-  if name_max < abbr_max then           --nameµƒ◊Ó¥Û≥§∂»±ÿ–Î≤ª–°”⁄abbr
-    name_max = abbr_max;
-  end
-  local fmt = "%-" .. abbr_max .. "s    %-" .. name_max .. "s    ";
-  
-  local protofieldsex = { ["__fmt"] = fmt .. ": " };
+  local protofieldsex = { };
   local protofields = {};
-  --ø™ ºÃ·»°field type, abbr, name°£Õ¨ ±–ﬁ∏ƒname“‘ π∂‘∆Îœ‘ æ°£Ω¯∂¯Ω®¡¢field
-  for _, k in pairs( fs ) do
-    local arg = fields[ k ];
-    local func = arg[ 1 ] or "string";
-    func = func:lower();
-    func = ProtoFieldShort[ func ] or func; --ºÚ–¥◊™ªª
+  
+  local fs = {};
+  for abbr in pairs( get_default_fieldsex() ) do
+    fs[ abbr ] = true;
+  end
 
-    local abbr = arg[ 2 ];
-    local name = arg[ 3 ] or abbr;
-    name = s2utf8( string.format( fmt, abbr, name ) );    --Ω‚æˆ∂‘∆ÎŒ Ã‚
-    
+  for k, tb in pairs( fields ) do
+    local func = tb[ 1 ];
+    if not func then
+      return error( string.format( "No.%d func missing", k ) );
+    end
+    func = func:lower();
+    func = ProtoFieldShort[ func ] or func; --ÁÆÄÂÜôËΩ¨Êç¢
+
+    --‰ºòÂÖàËØÜÂà´‰∏∫ProtoFieldÂ≠êÂáΩÊï∞
     local types = func;
     local exfunc;
-    local f = rawget( ProtoField, types );
-    if f then
-      func = f;
-    else
-      exfunc = types;
+    func = rawget( ProtoField, types );
+    if not func then
+      --Â∞ùËØïËØÜÂà´‰∏∫FormatEx
+      func = FormatEx[ types ];
+      if not func then
+        return error( string.format( "No.%d func %s unknown", k, types ) );
+      end
+      exfunc = func;
       func = ProtoField.string;
       types = "string";
     end
+
+    --Ê£ÄÊü•abbrÊòØÂê¶Â≠òÂú®„ÄÅÊòØÂê¶ÈáçÂ§ç
+    local abbr = tb[ 2 ];
+    if not abbr then
+      return error( string.format( "No.%d abbr missing", k ) );
+    end
+    if fs[ abbr ] then
+      return error( string.format( "No.%d %s repeat", k, abbr ) );
+    end
+    fs[ abbr ] = true;
+    
+    local name = tb[ 3 ] or abbr;
+    name = string.format( ShowFieldFormat, utf82s( name ) );
+    name = s2utf8( name );
     
     local field;
-    if #arg > 3 then
-      field = func( pre_fix .. abbr, name, select( 4, table.unpack( arg ) ) );
+    if #tb > 3 then
+      field = func( pre_fix .. abbr, name, select( 4, table.unpack( tb ) ) );
     else
       field = func( pre_fix .. abbr, name );
     end

@@ -1,89 +1,89 @@
---[=======[
--------- -------- -------- --------
-         TreeAddEx²Ù×÷
--------- -------- -------- --------
+ï»¿--[=======[
+---- ---- ---- ----
+
+## Wireshark TreeAddExå‡½æ•°
+
+å‡½æ•°ç”¨äºæ ¹æ®è¦æ±‚è‡ªåŠ¨æ·»åŠ è§£æå…ƒç´ ï¼Œå®šä¹‰å¦‚ä¸‹ï¼š
+```
+int       TreeAddEx                 (
+                                    table     protofieldsex,
+                                    TreeItem  root,
+                                    Tvb       tvb,
+                                    int       off,
+                                    ...
+                                    );
+```
+
+- protofieldsexä¸ºProtoFieldExè¿”å›çš„ç¬¬ä¸€ä¸ªè¡¨
+- ä¸å®šå‚ä»¥ short_abbr, [size|format_function,] short_abbr, ... å½¢å¼æä¾›
+    - short_abbrçš„ç¬¬ä¸€ä¸ªå­—ç¬¦å…è®¸ä¸º'<'æˆ–'>'ï¼Œç”¨äºæ ‡ç¤ºfieldçš„å¤§å°ç«¯ï¼Œé»˜è®¤å¤§ç«¯
+    - short_abbrå…è®¸ä»¥ç©ºæ ¼åˆ†éš”æ³¨é‡Šã€‚ç©ºæ ¼ä»¥åçš„æ‰€æœ‰æ•°æ®è¢«è®¤ä¸ºæ˜¯æ³¨é‡Šè€Œæ— è§†ä¹‹
+    - å½“æä¾›format_functionæ—¶ï¼Œå‡½æ•°è°ƒç”¨å¦‚ç¤ºï¼š`format_function( buf, off, nil, tree_add_func, root, field, proto );`
+        - å¦‚æœè°ƒç”¨å†…éƒ¨ä½¿ç”¨äº†tree_add_funcï¼Œåº”è¿”å›off + size
+        - å¦åˆ™åº”è¿”å›formatted_string, size
+        - å¤„ç†å°†åœ¨å…¶åè‡ªåŠ¨è°ƒç”¨`tree_add_func( root, field, buf( off, size ), formatted_string );`
+    - å½“ä¸æä¾›sizeæˆ–format_functionæ—¶ï¼Œä½¿ç”¨é»˜è®¤é•¿åº¦
+    - å½“æŒ‡å®šfieldæœªæœ‰é»˜è®¤é•¿åº¦æ—¶ï¼Œä½¿ç”¨å‰©ä½™çš„æ‰€æœ‰æ•°æ®
+    - å…è®¸æŒ‡å®šshort_abbråœ¨protofieldsexä¸­æ— åŒ¹é…ï¼Œæ­¤æ—¶æœ‰å¦‚ä¸‹è§„åˆ™
+          - å½“æä¾›format_functionæ—¶ï¼Œå‡½æ•°è°ƒç”¨å¦‚ç¤ºï¼š`format_function( buf, off, nil, tree_add_func, root, field, proto );`
+              - å¦‚æœè°ƒç”¨å†…éƒ¨ä½¿ç”¨äº†tree_add_funcï¼Œåº”è¿”å›off + size
+              - å¦åˆ™åº”è¿”å›formatted_string, sizeã€‚
+              - å¤„ç†å°†åœ¨å…¶åè‡ªåŠ¨è°ƒç”¨`tree_add_func( root, proto, buf( off, size), prefix_string .. formatted_string );`
+    - å¦åˆ™å¿…é¡»åœ¨ç©ºæ ¼åæŒ‡å®šç±»å‹ï¼Œæ”¯æŒç±»å‹å‚è€ƒFormatEx
+
+- å‡½æ•°è¿”å›å¤„ç†ç»“æŸåçš„off
+
+é»˜è®¤é•¿åº¦åˆ—è¡¨å¦‚ä¸‹ï¼š   
+```       
+{
+uint8     = 1,
+uint16    = 2,
+uint24    = 3,
+uint32    = 4,
+uint64    = 8,
+int8      = 1,
+int16     = 2,
+int24     = 3,
+int32     = 4,
+int64     = 8,
+
+framenum  = 4,
+bool      = 1,
+absolute_time = 4,
+relative_time = 4,
+
+ipv4      = 4,
+ipv6      = 16,
+ether     = 6,
+float     = 4,
+double    = 8,
+};
+```
+ç¤ºä¾‹1ï¼š
+```
+off = TreeAddEx( fieldsex, root, tvb, off,
+  "xxoo_b",                   --å¯è¯†åˆ«çš„short_abbrï¼Œä¸”å¯è¯†åˆ«é•¿åº¦
+  "xxoo_a", 2,                --å¼ºåˆ¶é•¿åº¦
+  "xxoo_s", format_xxx        --å¯è¯†åˆ«çš„short_abbrï¼Œä½†ä¸å¯è¯†åˆ«é•¿åº¦ï¼Œéœ€è¦è‡ªå®šä¹‰æ ¼å¼åŒ–
+  );
+--ç”Ÿæˆæ•ˆæœå¤§è‡´å¦‚ä¸‹ï¼š
+  Byte                : 0x00(0)
+  Bytes               : 0000
+  String              : xxxxxxxx
+```
+ç¤ºä¾‹2ï¼š
+```
+TreeAddEx( fieldsex, root, tvb, off,
+  "unknow_b uint8",            --æŒ‡å®šå¯è¯†åˆ«çš„æ”¯æŒç±»å‹ï¼Œä¸ç”¨åç»­æŒ‡å®šå¤§å°
+  "unknow_s string", 6,        --æ”¯æŒç±»å‹å¯è¯†åˆ«ï¼Œä½†å¼ºåˆ¶æŒ‡å®šå¤§å°
+  );
+--ç”Ÿæˆæ•ˆæœå¤§è‡´å¦‚ä¸‹ï¼š
+  String              : xxxxxxxx
+  * unknow_b          : 0x00(0)
+  * unknow_s          : xxxxxx
+```
 ]=======]
 
---[=======[
-¡ñ
-    int       TreeAddEx                 (
-                                        table     protofieldsex,
-                                        TreeItem  root,
-                                        Tvb       tvb,
-                                        int       off,
-                                        ...
-                                        );                                 [-4+, +1, v]
-        --¸ù¾İÒªÇó×Ô¶¯Éú³ÉÊ÷ÔªËØ
-        --protofieldsexÎªProtoFieldEx·µ»ØµÄµÚÒ»¸ö±í
-        --²»¶¨²ÎÒÔ short_abbr, [size|format_function,] short_abbr, ... ĞÎÊ½Ìá¹©
-          µ±²»Ìá¹©size»òformat_functionÊ±£¬Ê¹ÓÃÄ¬ÈÏ³¤¶È
-          µ±Ö¸¶¨fieldÎ´ÓĞÄ¬ÈÏ³¤¶ÈÊ±£¬Ê¹ÓÃÊ£ÓàµÄËùÓĞÊı¾İ
-          µ±Ö¸¶¨size <= 0Ê±£¬Ìø¹ı²»´¦Àí
-          Ä¬ÈÏ³¤¶ÈÁĞ±íÈçÏÂ£º          
-            {
-            uint8     = 1,
-            uint16    = 2,
-            uint24    = 3,
-            uint32    = 4,
-            uint64    = 8,
-            int8      = 1,
-            int16     = 2,
-            int24     = 3,
-            int32     = 4,
-            int64     = 8,
-
-            framenum  = 4,
-            bool      = 1,
-            absolute_time = 4,
-            relative_time = 4,
-
-            ipv4      = 4,
-            ipv6      = 16,
-            ether     = 6,
-            float     = 4,
-            double    = 8,
-            };
-        --abbr_nameµÄµÚÒ»¸ö×Ö·ûÔÊĞíÎª'<'»ò'>'£¬ÓÃÓÚ±êÊ¾fieldµÄ´óĞ¡¶Ë£¬Ä¬ÈÏ´ó¶Ë
-        --abbr_nameÔÊĞíÒÔ¿Õ¸ñ·Ö¸ô×¢ÊÍ¡£¿Õ¸ñÒÔºóµÄËùÓĞÊı¾İ±»ÈÏÎªÊÇ×¢ÊÍ¶øÎŞÊÓÖ®
-        --º¯Êı·µ»Ø´¦Àí½áÊøºóµÄoff
-        --µ±Ìá¹©format_functionÊ±£¬º¯ÊıÒÔÈçÏÂĞÎÊ½µ÷ÓÃ
-          format_function( buf, off, nil, tree_add_func, root, field );
-          Èç¹ûµ÷ÓÃÄÚ²¿Ê¹ÓÃÁËtree_add_func£¬Ó¦·µ»Øoff + size
-          ·ñÔòÓ¦·µ»Øformatted_string, size¡£
-          ´¦Àí½«ÔÚÆäºó×Ô¶¯µ÷ÓÃtree_add_func( root, field, buf( off, size ), formatted_string );
-
-        --ÔÊĞíÖ¸¶¨abbr_nameÔÚprotofieldsexÖĞÎŞÆ¥Åä£¬´ËÊ±ÓĞÈçÏÂ¹æÔò
-          --µ±Ìá¹©format_functionÊ±£¬º¯ÊıÒÔÈçÏÂĞÎÊ½µ÷ÓÃ
-            format_function( buf, off, nil, tree_add_func, root, field );
-            Èç¹ûµ÷ÓÃÄÚ²¿Ê¹ÓÃÁËtree_add_func£¬Ó¦·µ»Øoff + size
-            ·ñÔòÓ¦·µ»Øformatted_string, size¡£
-            ´¦Àí½«ÔÚÆäºó×Ô¶¯µ÷ÓÃtree_add_func( root, buf( off, size), prefix_string .. formatted_string );
-          --·ñÔò±ØĞëÔÚ¿Õ¸ñºóÖ¸¶¨ÀàĞÍ£¬Ö§³ÖÀàĞÍ²Î¿¼FormatEx
-
-        ex:
-          off = TreeAddEx( fieldsex, root, tvb, off,
-            "xxoo_b",                   --¿ÉÊ¶±ğµÄshort_abbr£¬ÇÒ¿ÉÊ¶±ğ³¤¶È
-            "xx", 2,                    --Ç¿ÖÆ³¤¶È
-            "xxoo_s", format_xxx        --¿ÉÊ¶±ğµÄshort_abbr£¬µ«²»¿ÉÊ¶±ğ³¤¶È£¬ĞèÒª×Ô¶¨Òå¸ñÊ½»¯
-            );
-          --Éú³ÉĞ§¹û´óÖÂÈçÏÂ£º
-          xxoo_b        Byte      :0x00
-          xx            xx        :0x0000(0)
-          xxoo_s        String    :xxxxxxxx
-
-        ex:
-          TreeAddEx( fieldsex, root, tvb, off,
-            "*xxoo_b uint8",            --Ö¸¶¨¿ÉÊ¶±ğµÄÖ§³ÖÀàĞÍ£¬²»ÓÃºóĞøÖ¸¶¨´óĞ¡
-            "*xxoo_s string", 6,        --Ö§³ÖÀàĞÍ¿ÉÊ¶±ğ£¬µ«Ç¿ÖÆÖ¸¶¨´óĞ¡
-            "*xxoo_a", 5                --²»Ö¸¶¨ÀàĞÍ£¬Ä¬ÈÏbytes
-            );
-          --Éú³ÉĞ§¹û´óÖÂÈçÏÂ£º
-          -             *xxoo_b   :0x00(0)
-          -             *xxoo_s   :xxxxxx
-          -             *xxoo_a   :##########
-]=======]
-
--------- -------- -------- -------- 
 local TypeDefaultSize =
   {
   uint8     = 1,
@@ -108,7 +108,7 @@ local TypeDefaultSize =
   float     = 4,
   double    = 8,
   };
--------- -------- -------- -------- 
+
 local FieldShort =
   {
   b   = "uint8",
@@ -126,33 +126,44 @@ local FieldShort =
   S   = "string",
   };
 
-local function TreeAddEx_FormatIt( format_func, tvb, off, size, tree_add_func, root, field )
-  local msg, size, limit_msg = format_func( tvb, off, size, tree_add_func, root, field );
-  --Èç¹û¸ñÊ½»¯º¯ÊıÄÚ²¿´¦ÀíÍê±Ï£¬Ôò²»ÔÙ¼ÌĞø
+local function TreeAddEx_FormatIt( format_func,
+                                   tvb,
+                                   off,
+                                   size,
+                                   tree_add_func,
+                                   root,
+                                   field,
+                                   proto )
+  local msg, size = format_func( tvb, off, size,
+    tree_add_func, root, field, proto );
+  --å¦‚æœæ ¼å¼åŒ–å‡½æ•°å†…éƒ¨å¤„ç†å®Œæ¯•ï¼Œåˆ™ä¸å†ç»§ç»­
   if not size then
-    size = msg;
-    return size;
+    return msg;   --msgå³ä¸ºsize
   end
-  --size²»¶Ô£¬Ò²²»½øĞĞºóĞø´¦Àí
-  if size < 0 then
-    return off;
+  --sizeä¸å¯¹ï¼ŒæŠ›å‡ºé”™è¯¯
+  local maxlimit = tvb:len() - off;
+  if size < 0 or size > ( tvb:len() - off ) then
+    return error( "TreeAddEx_FormatIt return @%d %d > %d",
+      off, size, maxlimit );
   end
-  --·ñÔò½øĞĞÄ¬ÈÏÌí¼Ó
-  --Èç¹û´æÔÚÏŞ³¤½á¹û£¬ÔòÓÅÏÈ²ÉÓÃ½á¹û
-  msg = limit_msg or msg;
+  --å¦åˆ™è¿›è¡Œé»˜è®¤æ·»åŠ 
   if "string" == type( field ) then
-    tree_add_func( root, tvb( off, size ), field .. msg );
+    if proto then
+      tree_add_func( root, proto, tvb( off, size ), field .. msg );
+    else
+      tree_add_func( root, tvb( off, size ), field .. msg );
+    end
   else
     tree_add_func( root, field, tvb( off, size ), msg );
   end
   return off + size;
 end
 
-local function TreeAddEx_AddOne( arg, k, root, tvb, off, protofieldsex )
-  --»ñÈ¡Êı¾İÃèÊö
-  local abbr = arg[ k ];      k = k + 1;
+local function TreeAddEx_AddOne( argv, k, protofieldsex, root, tvb, off )
+  --è·å–æ•°æ®æè¿°
+  local abbr = argv[ k ];      k = k + 1;
   
-  --ÅĞ¶¨´óĞ¡¶Ë
+  --åˆ¤å®šå¤§å°ç«¯
   local tree_add_func = root.add;
   local isnet = abbr:sub(1, 1);
   if isnet == '<' then
@@ -162,104 +173,81 @@ local function TreeAddEx_AddOne( arg, k, root, tvb, off, protofieldsex )
     abbr = abbr:sub( 2 );
   end
 
-  --·ÖÀëabbrÓëÀàĞÍÃèÊö
-  local abbr, format_type = abbr:match( "([^ ]+) *([^ ]*)" );
+  --åˆ†ç¦»abbrä¸ç±»å‹æè¿°
+  local abbr, format_func = abbr:match( "([^ ]+) *([^ ]*)" );
 
-  --³¢ÊÔÀàĞÍ¼òĞ´×ª»»
-  if FieldShort[ format_type ] then
-    format_type = FieldShort[ format_type ];
-  end
-
-  if format_type == "" then
-    format_type = nil;
-  end
-
-  --¿Õ´®ºöÂÔ
+  --ç©ºä¸²å¿½ç•¥
   if not abbr or abbr == "" then
     return off, k;
   end
 
-  --´ÓfieldsÀïÊ¶±ğabbr£¬µ±abbr²»¿ÉÊ¶±ğÊ±£¬fieldÎªÎ±Ç°×º
-  local tb = protofieldsex[ abbr ];
+  local next_abbr = argv[ k ];
+  local next_abbr_type = type( next_abbr );
+  local maxlimit = tvb:len() - off;
+
+  --è¯†åˆ«abbrï¼Œå½“abbrä¸å¯è¯†åˆ«æ—¶ï¼Œfieldä¸ºä¼ªå‰ç¼€
+  local tb = protofieldsex[ abbr ] or get_default_fieldsex()[ abbr ];
   local field;
   if tb then
     field = tb.field;
   else
-    field = string.format( protofieldsex.__fmt, "-", abbr:utf82s() ):s2utf8();
+    field = string.format( ShowFieldFormat .. ": ", "*" .. utf82s( abbr ) );
+    field = s2utf8( field );
   end
 
-  local next_abbr = arg[ k ];
-  local next_abbr_type = type( next_abbr );
-  --Èç¹ûÓĞÖ¸¶¨¸ñÊ½»¯º¯Êı£¬ÔòÊ¹ÓÃÖ®
-  if next_abbr_type == "function" then
-    return TreeAddEx_FormatIt( next_abbr, tvb, off, nil, tree_add_func, root, field ), k + 1;
+  if next_abbr_type == "function" then --å¦‚æœæœ‰æŒ‡å®šæ ¼å¼åŒ–å‡½æ•°ï¼Œåˆ™ä½¿ç”¨ä¹‹
+    return TreeAddEx_FormatIt( next_abbr, tvb, off, nil, tree_add_func, root, field, protofieldsex.__proto ), k + 1;
   end
 
-  --¿ªÊ¼ÓÅÏÈ´¦Àí¿ÉÊ¶±ğµÄabbr
-  if tb then
-    local abbr_size;
-    if next_abbr_type == "number" then
-      --abbr±»Ö¸¶¨´óĞ¡
-      local abbr_size = next_abbr;
-      if abbr_size < 0 then
-        return off, k + 1;
-      end
-      
-      --Ğ´ÔÚabbrÖĞµÄformat_typeÓÅÏÈ£¬Æä´ÎÊÇexfunc
-      format_type = format_type or tb.exfunc;
-      if format_type and FormatEx[ format_type ] then
-        return TreeAddEx_FormatIt( FormatEx[ format_type ], tvb, off, abbr_size, tree_add_func, root, field ), k + 1;
-      end
-      tree_add_func( root, field, tvb( off, abbr_size ) );
-      return off + abbr_size, k + 1;
-    end
-    --Èç¹ûÎ´ÓĞÖ¸¶¨´óĞ¡£¬Ôò³¢ÊÔÊ¹ÓÃÄ¬ÈÏ´óĞ¡
-    local abbr_size = TypeDefaultSize[ tb.types ];
-    --Ê¹ÓÃabbrµÄ±ê×¼ÀàĞÍ
-    if abbr_size then
-      tree_add_func( root, field, tvb( off, abbr_size ) );
-      return off + abbr_size, k;
+  if not tb then
+    if format_func == "" then
+      format_func = nil;
+    else
+      --å°è¯•ç±»å‹ç®€å†™è½¬æ¢
+      format_func = FieldShort[ format_func ] or format_func;
+      --å°è¯•è¯†åˆ«ä¸ºè‡ªå®šä¹‰æ ¼å¼åŒ–
+      format_func = FormatEx[ format_func ];
     end
 
-    --Ğ´ÔÚabbrÖĞµÄformat_typeÓÅÏÈ£¬Æä´ÎÊÇexfunc
-    format_type = format_type or tb.exfunc;
-    if format_type and FormatEx[ format_type ] then
-      return TreeAddEx_FormatIt( FormatEx[ format_type ], tvb, off, abbr_size, tree_add_func, root, field ), k;
+    if not format_func then
+      return error( string.format( "[%s]need FormatEx", abbr ) );
     end
-
-    tree_add_func( root, field, tvb( off ) );
-    return tvb:len(), k;
   end
 
-  --abbr²»¿ÉÊ¶±ğÊ±£¬³ı·ÇÁíÍâÖ¸¶¨¸ñÊ½»¯º¯Êı£¬·ñÔò±ØĞëÖ¸¶¨ÀàĞÍ£¬ÇÒÀàĞÍ¿É¸ñÊ½»¯
-  if not format_type then
-    return error( "abbr:" .. abbr .. " no fixed and no type" );
-  end
-  local format_func = FormatEx[ format_type ];
-  if not format_func then
-    return error( "abbr:" .. abbr .. ", type:" .. format_type .. " no fixed and type unknown" );
-  end
-
-  --Èç¹ûÓĞÖ¸¶¨´óĞ¡£¬ÔòÊ¹ÓÃÖ¸¶¨´óĞ¡
-  local abbr_size;
-  if next_abbr_type == "number" then
-    abbr_size = next_abbr;
+  local size = maxlimit;
+  if next_abbr_type == "number" then --æŒ‡å®šé•¿åº¦ï¼ŒåŒºåˆ«å¤„ç†
+    size = next_abbr;
     k = k + 1;
+  elseif tb then
+    size = TypeDefaultSize[ tb.types ] or maxlimit;
   end
 
-  return TreeAddEx_FormatIt( format_func, tvb, off, abbr_size, tree_add_func, root, field ), k;
+  if size < 0 or size > maxlimit then
+    return error( "TreeAddEx size error @%d %d > %d",
+      off, size, maxlimit );
+  end
+
+  if tb then
+    --å­˜åœ¨exfuncçš„è¯ï¼Œæ ¼å¼åŒ–ä¹‹
+    if tb.exfunc then
+      return TreeAddEx_FormatIt( tb.exfunc,
+        tvb, off, size, tree_add_func, root, field, protofieldsex.__proto ), k;
+    end
+    tree_add_func( root, field, tvb( off, size ) );
+    return off + size, k;
+  end
+
+  return TreeAddEx_FormatIt( format_func,
+  tvb, off, size, tree_add_func, root, field, protofieldsex.__proto ), k;
 end
 
 function TreeAddEx( protofieldsex, root, tvb, off, ... )
   local off = off or 0;
-  local arg = { ... };
+  local argv = { ... };
 
   local k = 1;
-  while k <= #arg do
-    off, k = TreeAddEx_AddOne( arg, k, root, tvb, off, protofieldsex );
-    if off >= tvb:len() then
-      break;
-    end
+  while k <= #argv do
+    off, k = TreeAddEx_AddOne( argv, k, protofieldsex, root, tvb, off );
   end
   return off;
 end

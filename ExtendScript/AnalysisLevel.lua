@@ -1,43 +1,53 @@
---[=======[
--------- -------- -------- --------
-         ½âÎöµÈ¼¶¿ØÖÆ
--------- -------- -------- --------
-]=======]
+ï»¿--[=======[
+---- ---- ---- ----
 
---[=======[
-¡ñ
-  string      main_analysis_level = "detail"; --È«¾Ö½âÎöµÈ¼¶¿ØÖÆ£¬Ä¬ÈÏÏ¸¶È×î¸ß
+## Wiresharkè§£æç­‰çº§æ§åˆ¶
 
-    --½âÎöµÈ¼¶ÓĞ"simple"|"more"|"complex"|"detail"£¬½âÎöÏ¸¶ÈÖğ²ãÌáÉı£¬½âÎöĞ§ÂÊÖğ²ãÏÂ½µ
-    --½âÎöµÈ¼¶ÔÊĞí¼òĞ´£º"s|m|c|d|S|M|C|D"
-    
-¡ñ
-  table       analysis_level_tables =    
+- è§£æç­‰çº§ï¼ˆè§£æç»†åº¦é€å±‚æå‡ï¼Œè§£ææ•ˆç‡é€å±‚ä¸‹é™ï¼‰
+
+```
+enum analysis_level_enum =    
     {
-    simple  = 1,        s = 1,
-    more    = 2,        m = 2,
-    complex = 3,        c = 3,
-    detail  = 4,        d = 4,
-    };                                  --µÈ¼¶Öµ×ª»»
+    simple  = 1,
+    more    = 2,
+    complex = 3,
+    detail  = 4,
+    };
+```
 
-  --Ìá¹©¼òĞ´¼ÓËÙ½âÎö    
-  const int   alvlS = analysis_level_tables.simple;
-  const int   alvlM = analysis_level_tables.more;
-  const int   alvlC = analysis_level_tables.complex;
-  const int   alvlD = analysis_level_tables.detail;
+- æä¾›ç®€å†™åŠ é€Ÿè§£æ
+
+```
+const int   alvlS = analysis_level_enum.simple;
+const int   alvlM = analysis_level_enum.more;
+const int   alvlC = analysis_level_enum.complex;
+const int   alvlD = analysis_level_enum.detail;
+```
+
+- å…¨å±€è§£æç­‰çº§æ§åˆ¶ï¼Œé»˜è®¤ç»†åº¦æœ€é«˜
+
+```
+int       main_analysis_level = analysis_level_enum.detail;
+```
 ]=======]
 
-main_analysis_level = "detail";
-
-analysis_level_tables =
+analysis_level_enum = setmetatable(
   {
-  simple  = 1,        s = 1,
-  more    = 2,        m = 2,
-  complex = 3,        c = 3,
-  detail  = 4,        d = 4,
-  };
+    simple  = 1,
+    more    = 2,
+    complex = 3,
+    detail  = 4,
+  },
+  {
+    __newindex = function()
+      return error( "ENUMç¦æ­¢ä¿®æ”¹" );
+    end;
+  }
+  );
 
-alvlS = analysis_level_tables.simple;
-alvlM = analysis_level_tables.more;
-alvlC = analysis_level_tables.complex;
-alvlD = analysis_level_tables.detail;
+alvlS = analysis_level_enum.simple;
+alvlM = analysis_level_enum.more;
+alvlC = analysis_level_enum.complex;
+alvlD = analysis_level_enum.detail;
+
+main_analysis_level = analysis_level_enum.detail;

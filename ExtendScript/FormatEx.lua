@@ -1,63 +1,59 @@
---[=======[
--------- -------- -------- --------
-         ×Ô¶¨Òå¸ñÊ½»¯
--------- -------- -------- --------
---FormatExÌá¹©Í¨ÓÃµÄ×Ô¶¨Òå¸ñÊ½»¯²Ù×÷£¬±»TreeAddExÊ¹ÓÃ
+ï»¿--[=======[
+---- ---- ---- ----
+
+## Wiresharkè‡ªå®šä¹‰æ ¼å¼åŒ–
+
+- FormatExæä¾›é€šç”¨çš„è‡ªå®šä¹‰æ ¼å¼åŒ–æ“ä½œï¼Œè¢«TreeAddExä½¿ç”¨
+
+function    | show exsample                | usebyte | notes
+------------|------------------------------|---------|------
+uint8       | 0x00(0)                      | 1
+uint16      | 0x0000(0)                    | 2
+uint24      | 0x000000(0)                  | 3
+uint32      | 0x00000000(0)                | 4
+uint64      | 0x0000000000000000(0)        | 8
+int8        | 0x00(0)                      | 1
+int16       | 0x0000(0)                    | 2
+int24       | 0x000000(0)                  | 3
+int32       | 0x00000000(0)                | 4
+int64       | 0x0000000000000000(0)        | 8
+bool        | true\|false                  | 1
+ipv4        | hostname(0.0.0.0)            | 4
+ipv4_port   | hostname:port(0.0.0.0:0)     | 6
+xipv4_port  | hostname:port(0.0.0.0:0)     | 6       | å­—èŠ‚åºæ ‡ç¤ºportï¼Œipä¸ä¹‹ååº
+float       | 0.0                          | 4
+string      | 0000000                      | N
+bytes       | 000000                       | N
+stringz     | 000000                       | N
+bxline_string|(00)0000                     | 1 + N   | xè¡¨ç¤ºheadä¸åŒ…å«è‡ªèº«å¤§å°
+wxline_string|(0000)0000                   | 2 + N
+dxline_string|(00000000)0000               | 4 + N
+bline_string| [00]0000                     | 1 + N
+wline_string| [0000]0000                   | 2 + N
+dline_string| [00000000]0000               | 4 + N
+bxline_bytes| (00)0000                     | 1 + N
+wxline_bytes| (0000)0000                   | 2 + N
+dxline_bytes| (00000000)0000               | 4 + N
+bline_bytes | [00]0000                     | 1 + N
+wline_bytes | [0000]0000                   | 2 + N
+dline_bytes | [00000000]0000               | 4 + N
+xdate       | 0000/00/00 00:00:00          | 4
+xtime       | 00day 00:00:00               | 4
+xcapacity   | 0.00T\|0.00G\|0.00M\|0.00K\|0.00B| N   | sizeéœ€æŒ‡å®š
+
+- ipv4ã€ipv4_portã€xipv4_porté¢å¤–è¯´æ˜ï¼š
+    - æ˜¾ç¤ºhostnameï¼Œéœ€è¦æ‰“å¼€`ç¼–è¾‘>>é¦–é€‰é¡¹>>Name Resolution>>Resolve network(IP) addresses`
+    - hostnameæ— æ³•ç¡®å®šæ—¶ï¼Œä¸æ˜¾ç¤ºhostnameï¼Œç›´æ¥æ˜¾ç¤ºipæ•°å€¼
+- stringã€bytesé¢å¤–è¯´æ˜ï¼š
+    - size == 0æ—¶ï¼Œè¿”å›ç©ºä¸²
+    - size < 0 æˆ– size > å‰©ä½™æ•°æ®å¤§å°ï¼ŒæŠ›å‡ºé”™è¯¯
+    - è¿”å›æ•°æ®é™é•¿ï¼Œè¶…è¿‡é™é•¿æ—¶ï¼Œè¿”å›æˆªæ–­ç»“æœï¼Œå¦‚`0000...`
+
 ]=======]
 
---[=======[
-¡ñ
-  uint8;              --0x00(0)                     1 byte
-  uint16;             --0x0000(0)                   2 byte
-  uint24;             --0x000000(0)                 3 byte
-  uint32;             --0x00000000(0)               4 byte
-  uint64;             --0x0000000000000000(0)       8 byte
-  int8;               --0x00(0)                     1 byte
-  int16;              --0x0000(0)                   2 byte
-  int24;              --0x000000(0)                 3 byte
-  int32;              --0x00000000(0)               4 byte
-  int64;              --0x0000000000000000(0)       8 byte
-
-  bool;               --true|false                  1 byte
-  ipv4;               --hostname(0.0.0.0)           4 byte
-                        0.0.0.0         //µ±hostnameÎŞ·¨È·¶¨Ê±£¬ÏÔÊ¾
-  ipv4_port;          --hostname:port(0.0.0.0:0)    6 byte
-                        0.0.0.0:0       //µ±hostnameÎŞ·¨È·¶¨Ê±£¬ÏÔÊ¾
-                        
-  xipv4_port;         --hostname:port(0.0.0.0:0)    6 byte
-                        0.0.0.0:0       //µ±hostnameÎŞ·¨È·¶¨Ê±£¬ÏÔÊ¾
-                                        //×Ö½ÚË³ĞòÓÃÓÚ±êÊ¾port£¬×¢ÒâipµÄ×Ö½ÚÓëportÏà·´
-  float;              --0.0             //ÎŞÊÓ´óĞ¡¶Ë
-  string;             --00000           //size == -1Ê±£¬È¡Ê£ÓàËùÓĞÊı¾İ
-                                        //×¢Òâ³ıÁË-1£¬ÆäÓà¸ºÖµ½«³ö´í
-                                        //×¢ÒâÕıÖµ³¬¹ıtvb·¶Î§Ò²³ö´í
-                                        //×¢Òâsize==0£¬¿ÉÒÔ¹ÊÒâ²åÈëÒ»¸ötree
-  bytes;              --000000          //size == -1Ê±£¬È¡Ê£ÓàËùÓĞÊı¾İ
-
-  stringz;                              //²»½ÓÊÜÖ¸¶¨size£¬Óö\0½Ø¶Ï(°üº¬\0)£¬·ñÔòÈ¡Ê£ÓàËùÓĞÊı¾İ
-
-  //xline±íÊ¾head²»°üº¬×ÔÉí´óĞ¡
-  bxline_string;      bline_string;                 1 + N byte
-  wxline_string;      wline_string;                 2 + N byte
-  dxline_string;      dline_string;                 4 + N byte
-
-  bxline_bytes;       bline_bytes;                  1 + N byte
-  wxline_bytes;       wline_bytes;                  2 + N byte
-  dxline_bytes;       dline_bytes;                  4 + N byte
-
-  xdate               --0000/00/00 00:00:00         4 byte
-  xtime               --00day 00:00:00              4 byte
-  xcapacity           --0.00T|0.00G|0.00M|0.00K|0.00B       N byteĞèÖ¸¶¨
-
-  ×¢Òâ£¬µ±string»òbytesÀàĞÍÊı¾İ¹ı´óÊ±£¬»á·µ»ØµÚÈı¸öÊı¾İ½Ø¶Ï½á¹û£¬Èç0000...
-]=======]
-
-local function LimitString( str )
-  if #str > 0x2C then
-    str = str:sub( 1, 0x28 ) .. "...";
-  end
-  return str;
-end
+-- æ•°æ®é™é•¿ï¼Œä¸åšå…¨å±€é…ç½®ï¼Œä¸ºè®°
+local LimitAdd = "...";
+local StringLimitMax = 0x2C;  -- æ•°æ®è¶…è¿‡æ­¤é•¿åº¦å°†é‡‡ç”¨é™é•¿åŠ åç¼€ï¼ˆé™é•¿åº”>0x10ï¼‰
 
 FormatEx = { };
 function FormatEx.uint8( tvb, off, size, func, root )
@@ -103,7 +99,7 @@ end
 
 function FormatEx.int8( tvb, off, size, func, root )
   local v = tvb( off, 1 ):int();
-  return string.format( "0x%02X(%d)", v, v ), 1;
+  return string.format( "0x%02X(%d)", v % 0x100, v ), 1;
 end
 function FormatEx.int16( tvb, off, size, func, root )
   local v;
@@ -112,7 +108,7 @@ function FormatEx.int16( tvb, off, size, func, root )
   else
     v = tvb( off, 2 ):int();
   end
-  return string.format( "0x%04X(%d)", v, v ), 2;
+  return string.format( "0x%04X(%d)", v % 0x10000, v ), 2;
 end
 function FormatEx.int24( tvb, off, size, func, root )
   local v;
@@ -121,7 +117,10 @@ function FormatEx.int24( tvb, off, size, func, root )
   else
     v = tvb( off, 3 ):int();
   end
-  return string.format( "0x%06X(%d)", v, v ), 3;
+  if v & 0x800000 ~= 0 and v > 0 then   --ä¿®æ­£è´Ÿæ•°æ— æ³•æ­£ç¡®æ˜¾ç¤ºçš„BUG
+    v = v | 0xFFFFFFFFFF000000;
+  end
+  return string.format( "0x%06X(%d)", v % 0x1000000, v ), 3;
 end
 function FormatEx.int32( tvb, off, size, func, root )
   local v;
@@ -130,7 +129,7 @@ function FormatEx.int32( tvb, off, size, func, root )
   else
     v = tvb( off, 4 ):int();
   end
-  return string.format( "0x%08X(%d)", v, v ), 4;
+  return string.format( "0x%08X(%d)", v % 0x100000000, v ), 4;
 end
 function FormatEx.int64( tvb, off, size, func, root )
   local v;
@@ -139,10 +138,10 @@ function FormatEx.int64( tvb, off, size, func, root )
   else
     v = tvb( off, 8 ):int64();
   end
-  return "0x" .. v:tohex() .. '(' .. v .. ')', 8;
+  return "0x" .. v:tohex( -16 ) .. '(' .. v .. ')', 8;
 end
 
-function FormatEx.bool( tvb, off )
+function FormatEx.bool( tvb, off, size, func, root )
   local v = tvb( off, 1 ):int();
   if v == 0 then
     return "false", 1;
@@ -226,49 +225,73 @@ function FormatEx.xipv4_port( tvb, off, size, func, root )
 end
 
 function FormatEx.float( tvb, off, size, func, root )
-  return tvb( off, 4 ):float(), 4;
+  if func and func ~= root.add then
+    return tvb( off, 4 ):le_float(), 4;
+  else
+    return tvb( off, 4 ):float(), 4;
+  end
 end
 
 function FormatEx.string( tvb, off, size, func, root )
-  local ss;
-  if size == nil then
-    ss = tvb:raw( off );
-  else
-    ss = tvb:raw( off, size );
+  local maxlimit = tvb:len() - off;
+  size = size or maxlimit;
+
+  if size > maxlimit or size < 0 then
+    return error( string.format( "FormatEx size error : @%d %d > %d",
+      off, size, maxlimit ) );
+  end
+  
+  local realsize = size;
+  local add = "";
+  if size > StringLimitMax then
+    add = LimitAdd;
+    size = StringLimitMax - #add;
   end
 
-  return ss, #ss, LimitString( ss );
+  return tvb:raw( off, size ) .. add, realsize;
 end
 
 function FormatEx.bytes( tvb, off, size, func, root )
-  local ss, size = FormatEx.string( tvb ,off, size );
-  ss = bin2hex( ss );
+  local maxlimit = tvb:len() - off;
+  size = size or maxlimit;
 
-  return ss, size, LimitString( ss );
+  if size > maxlimit or size < 0 then
+    return error( string.format( "FormatEx size error : @%d %d > %d",
+      off, size, maxlimit ) );
+  end
+  
+  local realsize = size;
+  local add = "";
+  if size > ( StringLimitMax // 2 ) then
+    add = LimitAdd;
+    size = ( StringLimitMax - #add ) // 2;
+  end
+
+  return bin2hex( tvb:raw( off, size ) ) .. add, realsize;
 end
 
 function FormatEx.stringz( tvb, off, size, func, root )
-  local e = off;
-  local len = tvb:len();
-  local size = len - off;
-  for i = off, len - 1 do
-    if tvb( i, 1 ):uint() == 0 then
-      size = i - off + 1;
-      break;
-    end
+  local maxlimit = tvb:len() - off;
+  local size = tvb:raw( off ):find( "\x00", 1, true ) or maxlimit;
+
+  local realsize = size;
+  local add = "";
+  if size > StringLimitMax then
+    add = LimitAdd;
+    size = StringLimitMax - #add;
   end
-  local ss = tvb:raw( off, size );
-  return ss, size, LimitString( ss );
+
+  return tvb:raw( off, size ) .. add, realsize;
 end
 
 local function get_line_string( ls, x, tvb, off, size, func, root )
   local fmt;
   if x then
     x = 0;
-    fmt = "(%0" .. ls * 2 .. "x)";
+    fmt = string.format( "(%%0%dx)", ls * 2 );
   else
     x = ls;
-    fmt = "[%0" .. ls * 2 .. "x]";
+    fmt = string.format( "[%%0%dx]", ls * 2 );
   end
   local size;
   if func and func ~= root.add then
@@ -277,9 +300,22 @@ local function get_line_string( ls, x, tvb, off, size, func, root )
     size = tvb( off, ls ):uint();
   end
 
-  local ss = tvb:raw( off + ls, size - x );
+  local maxlimit = tvb:len() - off;
+  local realsize = size + ls - x;
+  if realsize > maxlimit then
+    return error( string.format( "FormatEx size overload : @%d %d > %d",
+      off, realsize, maxlimit ) );
+  end
 
-  return ss, size + ls - x, string.format( fmt, #ss ) .. LimitString( ss );
+  size = size - x;
+  local preadd = string.format( fmt, size );
+  local add = "";
+  if size > StringLimitMax - #preadd then
+    add = LimitAdd;
+    size = StringLimitMax - #preadd - #add;
+  end
+
+  return preadd .. tvb:raw( off + ls, size ) .. add, realsize;
 end
 
 function FormatEx.bxline_string( tvb, off, size, func, root )
@@ -305,10 +341,10 @@ local function get_line_bytes( ls, x, tvb, off, size, func, root )
   local fmt;
   if x then
     x = 0;
-    fmt = "(%0" .. ls * 2 .. "x)";
+    fmt = string.format( "(%%0%dx)", ls * 2 );
   else
     x = ls;
-    fmt = "[%0" .. ls * 2 .. "x]";
+    fmt = string.format( "[%%0%dx]", ls * 2 );
   end
   local size;
   if func and func ~= root.add then
@@ -317,9 +353,22 @@ local function get_line_bytes( ls, x, tvb, off, size, func, root )
     size = tvb( off, ls ):uint();
   end
 
-  local ss = bin2hex( tvb:raw( off + ls, size - x ) );
+  local maxlimit = tvb:len() - off;
+  local realsize = size + ls - x;
+  if realsize > maxlimit then
+    return error( string.format( "FormatEx size overload : @%d %d > %d",
+      off, realsize, maxlimit ) );
+  end
 
-  return ss, size + ls - x, string.format( fmt, size - x ) .. LimitString( ss );
+  size = size - x;
+  local preadd = string.format( fmt, size );
+  local add = "";
+  if size > ( ( StringLimitMax - #preadd ) // 2 ) then
+    add = LimitAdd;
+    size = ( StringLimitMax - #preadd - #add ) // 2;
+  end
+
+  return preadd .. bin2hex( tvb:raw( off + ls, size ) ) .. add, realsize;
 end
 
 function FormatEx.bxline_bytes( tvb, off, size, func, root )
@@ -368,17 +417,18 @@ end
 
 function FormatEx.xcapacity( tvb, off, size, func, root )
   local x;
-  if func and func ~= root.add then
-    x = tvb( off, size ):le_uint64();
-    local f = UInt64.new( 1 );      --ĞŞÕıµÍ°æ±¾wiresharkÖ»»á¶Á8 byteµÄBUG
-    for k = 1, size do
-      f = f * UInt64.new( 0x100 );
-    end
-    x = x % f;
-  else
-    x = tvb( off, size ):uint64();
-    for k = 1, 8 - size do
-      x = x / UInt64.new( 0x100 );
+  -- ç”±äºä½ç‰ˆæœ¬wiresharkåœ¨æ“ä½œ64æ—¶ï¼Œåªä¼šè¯»8byteï¼Œæ•…é‡‡ç”¨ä¸€ä¸ªç¬¨åŠæ³•
+  local x = UInt64.new( 0 );
+  local step = UInt64.new( 0x100 );
+  local mul = UInt64.new( 1 );
+  for k = 1, size do
+    local f = tvb( off + k - 1, 1 ):uint();
+    f = UInt64.new( f );
+    if func and func ~= root.add then
+      x = f * mul + x;
+      mul = mul * step;
+    else
+      x = x * step + f;
     end
   end
 

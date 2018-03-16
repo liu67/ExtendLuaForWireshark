@@ -32,7 +32,6 @@ string    aes_ecb_pkcs7padding_encrypt
                                     string data,
                                     string key
                                     );
-string    aes.ecb.p7enc             ( ... );
 string    string:aes_ecb_p7_enc     ( ... );
 
 string    aes_ecb_pkcs7padding_decrypt
@@ -40,7 +39,6 @@ string    aes_ecb_pkcs7padding_decrypt
                                     string data,
                                     string key
                                     );
-string    aes.ecb.p7dec             ( ... );
 string    string:aes_ecb_p7_dec     ( ... );
 ```
 
@@ -53,7 +51,6 @@ string    aes_cbc_pkcs7padding_encrypt
                                     string key,
                                     string ivec = "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0"
                                     );
-string    aes.cbc.p7enc             ( ... );
 string    string:aes_cbc_p7_enc     ( ... );
 
 string    aes_cbc_pkcs7padding_decrypt
@@ -62,7 +59,6 @@ string    aes_cbc_pkcs7padding_decrypt
                                     string key,
                                     string ivec = "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0"
                                     );
-string    aes.cbc.p7dec             ( ... );
 string    string:aes_cbc_p7_dec     ( ... );
 ```
 
@@ -70,9 +66,6 @@ string    string:aes_cbc_p7_dec     ( ... );
 
 ```
 string    aes_ecb_encrypt           ( string data, string key );
-string    aes.ecb.enc               ( ... );
-string    aes.ecb.enc               ( ... );
-
 string    aes_ecb_decrypt           ( string data, string key );
 string    string:aes_ecb_enc        ( ... );
 string    string:aes_ecb_dec        ( ... );
@@ -86,7 +79,6 @@ string    aes_cbc_encrypt           (
                                     string key,
                                     string ivec = "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0"
                                     );
-string    aes.cbc.enc               ( ... );
 string    string:aes_cbc_enc        ( ... );
 
 string    aes_cbc_decrypt           (
@@ -94,7 +86,6 @@ string    aes_cbc_decrypt           (
                                     string key,
                                     string ivec = "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0"
                                     );
-string    aes.cbc.dec               ( ... );
 string    string:aes_cbc_dec        ( ... );
 ```
 
@@ -151,8 +142,9 @@ number    string:crcccitt ( );
 
 ```
 string    tovarint        ( number value, bool signed = false );
-
-// 当返回 usebytes == 0时，表示操作失败
+```
+- 当getvarint返回 usebytes == 0 时，表示操作失败
+```
 number value, number usebytes
           getvarint       ( string data, bool signed = false );
 number value, number usebytes
@@ -162,6 +154,8 @@ number value, number usebytes
 ---- ---- ---- ----
 
 ## TEA
+
+- 提供的KEY长度不足 16 byte时，以\x00补足
 
 ```
 string    TeanEncrypt     ( string data, string key );
@@ -201,6 +195,9 @@ string    string:xxtea_dec( ... );
 
 ## AES RAW
 
+- AES数据块大小 16 byte 。不对齐部分不处理，忽略之
+- 提供的KEY长度不足 16 byte时，以\x00补足
+
 ```
 string    aes_encrypt     ( string data, string key );
 string    aes_decrypt     ( string data, string key );
@@ -212,6 +209,9 @@ string    string:aes_dec  ( ... );
 ---- ---- ---- ----
 
 ## DES RAW
+
+- DES数据块大小 16 byte 。不对齐部分不处理，忽略之
+- 提供的KEY长度不足 8 byte时，以\x00补足
 
 ```
 string    des_encrypt     ( string data, string key );
@@ -248,11 +248,11 @@ string    string:bin2hex  ( ... );
 
 为了简化参数，设计flag
 
-- flag & 1 表示ASCII
-- flag & 2 表示Unicode
-- flag & 8 表示UTF8
-- flag & 4 表示isup == false
-- flag >= 0x10的部分被当作prews参数
+- flag & 1 表示显示编码为ASCII。（编码不冲突，优先顺序如示）
+- flag & 2 表示显示编码为Unicode
+- flag & 8 表示显示编码为UTF8
+- flag & 4 表示显示hex为小写，默认hex大写显示
+- flag >= 0x10的部分被当作prews参数，如0x20表示前缀2个空格
 
 ```
 string    showbin         ( string data, number flag = 1 );
@@ -328,7 +328,6 @@ string    blowfish_ecb_pkcs7padding_encrypt
                                     string data,
                                     string key
                                     );
-string    blowfish.ecb.p7enc        ( ... );
 string    string:bf_ecb_p7_enc      ( ... );
 
 string    blowfish_ecb_pkcs7padding_decrypt
@@ -336,7 +335,6 @@ string    blowfish_ecb_pkcs7padding_decrypt
                                     string data,
                                     string key
                                     );
-string    blowfish.ecb.p7dec        ( ... );
 string    string:bf_ecb_p7_dec      ( ... );
 ```
 
@@ -349,7 +347,6 @@ string    blowfish_cbc_pkcs7padding_encrypt
                                     string key,
                                     string ivec = "\0\0\0\0\0\0\0\0"
                                     );
-string    blowfish.cbc.p7enc        ( ... );
 string    string:bf_cbc_p7_enc      ( ... );
 
 string    blowfish_cbc_pkcs7padding_decrypt
@@ -358,7 +355,6 @@ string    blowfish_cbc_pkcs7padding_decrypt
                                     string key,
                                     string ivec = "\0\0\0\0\0\0\0\0"
                                     );
-string    blowfish.cbc.p7dec        ( ... );
 string    string:bf_cbc_p7_dec      ( ... );
 ```
 
@@ -366,11 +362,8 @@ string    string:bf_cbc_p7_dec      ( ... );
 
 ```
 string    blowfish_ecb_encrypt      ( string data, string key );
-string    blowfish.ecb.enc          ( ... );
-string    string:bf_ecb_enc         ( ... );
-
 string    blowfish_ecb_decrypt      ( string data, string key );
-string    blowfish.ecb.enc          ( ... );
+string    string:bf_ecb_enc         ( ... );
 string    string:bf_ecb_dec         ( ... );
 ```
 
@@ -382,7 +375,6 @@ string    blowfish_cbc_encrypt      (
                                     string key,
                                     string ivec = "\0\0\0\0\0\0\0\0"
                                     );
-string    blowfish.cbc.enc          ( ... );
 string    string:bf_cbc_enc         ( ... );
 
 string    blowfish_cbc_decrypt      (
@@ -390,7 +382,6 @@ string    blowfish_cbc_decrypt      (
                                     string key,
                                     string ivec = "\0\0\0\0\0\0\0\0"
                                     );
-string    blowfish.cbc.dec          ( ... );
 string    string:bf_cbc_dec         ( ... );
 ```
 
@@ -410,7 +401,6 @@ string    des_ecb_pkcs7padding_encrypt
                                     string data,
                                     string key
                                     );
-string    des.ecb.p7enc             ( ... );
 string    string:des_ecb_p7_enc     ( ... );
 
 string    des_ecb_pkcs7padding_decrypt
@@ -418,7 +408,6 @@ string    des_ecb_pkcs7padding_decrypt
                                     string data,
                                     string key
                                     );
-string    des.ecb.p7dec             ( ... );
 string    string:des_ecb_p7_dec     ( ... );
 ```
 
@@ -431,7 +420,6 @@ string    des_cbc_pkcs7padding_encrypt
                                     string key,
                                     string ivec = "\0\0\0\0\0\0\0\0"
                                     );
-string    des.cbc.p7enc             ( ... );
 string    string:des_cbc_p7_enc     ( ... );
 
 string    des_cbc_pkcs7padding_decrypt
@@ -440,7 +428,6 @@ string    des_cbc_pkcs7padding_decrypt
                                     string key,
                                     string ivec = "\0\0\0\0\0\0\0\0"
                                     );
-string    des.cbc.p7dec             ( ... );
 string    string:des_cbc_p7_dec     ( ... );
 ```
 
@@ -453,7 +440,6 @@ string    des_ncbc_pkcs7padding_encrypt
                                     string key
                                     string ivec = "\0\0\0\0\0\0\0\0"
                                     );
-string    des.ncbc.p7enc            ( ... );
 string    string:des_ncbc_p7_enc    ( ... );
 
 string    des_ncbc_pkcs7padding_decrypt
@@ -462,7 +448,6 @@ string    des_ncbc_pkcs7padding_decrypt
                                     string key
                                     string ivec = "\0\0\0\0\0\0\0\0"
                                     );
-string    des.ncbc.p7dec            ( ... );
 string    string:des_ncbc_p7_dec    ( ... );
 ```
 
@@ -479,7 +464,6 @@ string    des_ecb3_pkcs7padding_encrypt
                                     string data,
                                     string key
                                     );
-string    des.ecb3.p7enc            ( ... );
 string    string:des_ecb3_p7_enc    ( ... );
 
 string    des_ecb3_pkcs7padding_decrypt
@@ -487,7 +471,6 @@ string    des_ecb3_pkcs7padding_decrypt
                                     string data,
                                     string key
                                     );
-string    des.ecb3.p7dec            ( ... );
 string    string:des_ecb3_p7_dec    ( ... );
 ```
 
@@ -495,9 +478,6 @@ string    string:des_ecb3_p7_dec    ( ... );
 
 ```
 string    des_ecb_encrypt           ( string data, string key );
-string    des.ecb.enc               ( ... );
-string    des.ecb.enc               ( ... );
-
 string    des_ecb_decrypt           ( string data, string key );
 string    string:des_ecb_enc        ( ... );
 string    string:des_ecb_dec        ( ... );
@@ -511,7 +491,6 @@ string    des_cbc_encrypt           (
                                     string key,
                                     string ivec = "\0\0\0\0\0\0\0\0"
                                     );
-string    des.cbc.enc               ( ... );
 string    string:des_cbc_enc        ( ... );
 
 string    des_cbc_decrypt           (
@@ -519,7 +498,6 @@ string    des_cbc_decrypt           (
                                     string key,
                                     string ivec = "\0\0\0\0\0\0\0\0"
                                     );
-string    des.cbc.dec               ( ... );
 string    string:des_cbc_dec        ( ... );
 ```
 
@@ -531,7 +509,6 @@ string    des_ncbc_encrypt          (
                                     string key,
                                     string ivec = "\0\0\0\0\0\0\0\0"
                                     );
-string    des.ncbc.enc            ( ... );
 string    string:des_ncbc_enc     ( ... );
 
 string    des_ncbc_decrypt          (
@@ -539,19 +516,16 @@ string    des_ncbc_decrypt          (
                                     string key,
                                     string ivec = "\0\0\0\0\0\0\0\0"
                                     );
-string    des.ncbc.dec            ( ... );
 string    string:des_ncbc_dec     ( ... );
 ```
 
 ### 3DES/ECB/NoPadding
 
 ```
-string    des_ecb3_encrypt          ( string data, string key );
-string    des.ecb3.enc            ( ... );
+string    des_ecb3_encrypt        ( string data, string key );
 string    string:des_ecb3_enc     ( ... );
 
 string    des_ecb3_decrypt          ( string data, string key );
-string    des.ecb3.enc            ( ... );
 string    string:des_ecb3_dec     ( ... );
 ```
 
@@ -575,37 +549,37 @@ bool      deletemem       ( void* lpmem );  // 释放由newmem申请的内存
   参数value不存在时，视为读内存操作，成功则返回相应值，失败则抛出错误
   参数value存在时，视为读内存操作，成功则无返回值，失败则抛出错误
 */
-          mkb             ( void* lpmem [, number value] ); // 读/写无符号byte值，小端
-          mkB             ( void* lpmem [, number value] ); // 读/写无符号byte值，大端
-          mkbs            ( void* lpmem [, number value] ); // 读/写有符号byte值，小端
-          mkBs            ( void* lpmem [, number value] ); // 读/写有符号byte值，大端
+          mkb             ( void* lp [, number v] ); // 读/写无符号byte值，小端
+          mkB             ( void* lp [, number v] ); // 读/写无符号byte值，大端
+          mkbs            ( void* lp [, number v] ); // 读/写有符号byte值，小端
+          mkBs            ( void* lp [, number v] ); // 读/写有符号byte值，大端
 
-          mkw             ( void* lpmem [, number value] ); // 读/写无符号word值，小端
-          mkW             ( void* lpmem [, number value] ); // 读/写无符号word值，大端
-          mkws            ( void* lpmem [, number value] ); // 读/写有符号word值，小端
-          mkWs            ( void* lpmem [, number value] ); // 读/写有符号word值，大端
+          mkw             ( void* lp [, number v] ); // 读/写无符号word值，小端
+          mkW             ( void* lp [, number v] ); // 读/写无符号word值，大端
+          mkws            ( void* lp [, number v] ); // 读/写有符号word值，小端
+          mkWs            ( void* lp [, number v] ); // 读/写有符号word值，大端
 
-          mkd             ( void* lpmem [, number value] ); // 读/写无符号dword值，小端
-          mkD             ( void* lpmem [, number value] ); // 读/写无符号dword值，大端
-          mkds            ( void* lpmem [, number value] ); // 读/写有符号dword值，小端
-          mkDs            ( void* lpmem [, number value] ); // 读/写有符号dword值，大端
+          mkd             ( void* lp [, number v] ); // 读/写无符号dword值，小端
+          mkD             ( void* lp [, number v] ); // 读/写无符号dword值，大端
+          mkds            ( void* lp [, number v] ); // 读/写有符号dword值，小端
+          mkDs            ( void* lp [, number v] ); // 读/写有符号dword值，大端
 
-          mkq             ( void* lpmem [, number value] ); // 读/写无符号qword值，小端
-          mkQ             ( void* lpmem [, number value] ); // 读/写无符号qword值，大端
-          mkqs            ( void* lpmem [, number value] ); // 读/写有符号qword值，小端
-          mkQs            ( void* lpmem [, number value] ); // 读/写有符号qword值，大端
+          mkq             ( void* lp [, number v] ); // 读/写无符号qword值，小端
+          mkQ             ( void* lp [, number v] ); // 读/写无符号qword值，大端
+          mkqs            ( void* lp [, number v] ); // 读/写有符号qword值，小端
+          mkQs            ( void* lp [, number v] ); // 读/写有word值，大端
 
-          mkf             ( void* lpmem [, number value] ); // 读/写float值，小端
-          mkF             ( void* lpmem [, number value] ); // 读/写float值，大端
+          mkf             ( void* lp [, number v] ); // 读/写float值，小端
+          mkF             ( void* lp [, number v] ); // 读loat值，大端
 
-          mkdb            ( void* lpmem [, number value] ); // 读/写double值，小端
-          mkDBs           ( void* lpmem [, number value] ); // 读/写double值，大端
+          mkdb            ( void* lp [, number v] ); // 读/写double值，小端
+          mkDBs           ( void* lp [, number v] ); // 读/写double值，大端
 
-number    bswap           ( number value, number size = 4|8 ); // 指定翻转数据
-number    bswap_byte      ( number value );
-number    bswap_word      ( number value );
-number    bswap_dword     ( number value );
-number    bswap_qword     ( number value );
+number    bswap           ( number v, number size = 4|8 ); // 指定翻转数据
+number    bswap_byte      ( number v );
+number    bswap_word      ( number v );
+number    bswap_dword     ( number v );
+number    bswap_qword     ( number v );
 ```
 
 ---- ---- ---- ----
@@ -646,32 +620,20 @@ void      RsaKey:__gc               ( );
 string    RsaKey:__tostring         ( );  // 返回"RsaKey*:####"
 
 RsaKey    rsa_open_public_key       ( string filename );
-RsaKey    rsa.pub.open              ( ... );
-
-RsaKey    rsa_set_public_key        ( string rsakey );
-RsaKey    rsa.pub.set               ( ... );
-
 RsaKey    rsa_open_private_key      ( string filename );
-RsaKey    rsa.prv.open              ( ... );
-
+RsaKey    rsa_set_public_key        ( string rsakey );
 RsaKey    rsa_set_private_key       ( string rsakey );
-RsaKey    rsa.prv.set               ( ... );
+
 
 string    rsa_public_encrypt        ( string data, RsaKey key );
-string    rsa.pub.enc               ( ... );
-string    string:rsa_pub_enc        ( ... );
-
 string    rsa_public_decrypt        ( string data, RsaKey key );
-string    rsa.pub.dec               ( ... );
+string    string:rsa_pub_enc        ( ... );
 string    string:rsa_pub_dec        ( ... );
 
 
 string    rsa_private_encrypt       ( string data, RsaKey key );
-string    rsa.prv.enc               ( ... );
-string    string:rsa_prv_enc        ( ... );
-
 string    rsa_private_decrypt       ( string data, RsaKey key );
-string    rsa.prv.dec               ( ... );
+string    string:rsa_prv_enc        ( ... );
 string    string:rsa_prv_dec        ( ... );
 ```
 
@@ -732,8 +694,6 @@ string    string:sha512             ( );
 ---- ---- ---- ----
 
 ## PE
-
-- Lua5.3以下无法正确使用此函数
 
 ```
 table     PE              ( number hmod = nullptr );
@@ -881,7 +841,8 @@ void      TCP:__gc        ( );
 string    TCP:__tostring  ( );
 ```
 
-- 以下函数，Server不支持
+以下函数，Server不支持
+
 - 接收延时，毫秒计（默认取消延时）
 ```
 TCP       TCP:settimeout  ( int timeout = -1 );
@@ -900,7 +861,7 @@ string    TCP:recv        ( number size = 0x800 );
 bool      TCP:check       ( );
 ```
 
-- 以下函数，Client不支持
+以下函数，Client不支持
 
 - 当不提供timeout时，默认超时值-1，即阻塞直到连接发生
 - 当提供timeout(毫秒计)时，阻塞指定时间，直到连接发生或超时返回
@@ -938,8 +899,7 @@ table, table
 ```
 void      Sleep           ( number ms = 0 );    // 暂停线程ms毫秒，ms允许为空
 number    GetTickCount    ( );                  // 获取系统启动时间毫秒数
-        
-// Lua5.3以下无法正确使用以下函数
+
 HMODULE   GetModuleHandle ( string mod_name = "" );
 HMODULE   LoadLibrary     ( string lib_name );  // 失败返回nil, errorcode
 void      FreeLibrary     ( HMODULE mode );     // 失败返回errorcode
@@ -953,8 +913,12 @@ void*     GetProcAddress  ( HMODULE mode, string name );
 - 访问错误时，抛出错误
 
 ```
-/*
-options表可以设置如下参数(注意小写名称)：
+number response_code, table response_headers, string response_body
+          xhttp                     ( string url, table options = {} );
+```
+
+- options表可以设置如下参数(注意小写名称)：
+```
   {
   ["connect_time_out"]  = number;   // 连接超时，毫秒计，默认20000，即20s
   ["time_out"]          = string;   // 访问超时，毫秒计，默认10000，即10s
@@ -965,29 +929,27 @@ options表可以设置如下参数(注意小写名称)：
   ["verbose"]           = bool;     // 细节展示，默认false不展示
   ["header"]            = table;    // http head。以  [键名] = 值  形式组表
   }
+```
 
 示例代码：
-
-  local c, h, b = xhttp("http://www.qq.com");
+```
+  local c, h, b = xhttp( "http://www.qq.com" );
   for k, v in pairs( h ) do
     xlog( "key:" .. k, "value:" .. v );
   end
 
-  local c, h, b = xhttp("http://www.qq.com",
-                        {
-                        connect_time_out = 10000,
-                        time_out = 500,
-                        proxy = "127.0.0.1:8080",
-                        data = "post data",
-                        header =
-                          {
+  local c, h, b = xhttp( "http://www.qq.com",
+                         {
+                         connect_time_out = 10000,
+                         time_out = 500,
+                         proxy = "127.0.0.1:8080",
+                         data = "post data",
+                         header =
+                           {
                           xxx = "xxxx";
-                          }
-                        }
+                           }
+                         }
                        );
-*/
-number response_code, table response_headers, string response_body
-          xhttp                     ( string url, table options = {} );
 ```
 
 ---- ---- ---- ----
@@ -1005,18 +967,22 @@ void      xlog            ( ... );
 void      dbgview         ( ... );
 ```
 
-xlog_level用于控制输出
+- 输出控制
 
-- "off"       // 屏蔽输出
-- "fatal"     // 致命错误，程序无法继续执行
-- "error"     // 反映错误，例如一些API的调用失败
-- "warn"      // 反映某些需要注意的可能有潜在危险的情况，可能会造成崩溃或逻辑错误之类
-- "info"      // 表示程序进程的信息
-- "debug"     // 普通的调试信息，这类信息发布时一般不输出
-- "trace"     // 最精细的调试信息，多用于定位错误，查看某些变量的值
-- "on"        // 全输出（默认）
 ```
-string    xlog_level;
+enum xlog_level_enum =
+  {
+  off         = 0, // 屏蔽输出
+  fatal       = 1, // 致命错误，程序无法继续执行
+  error       = 2, // 反映错误，例如一些API的调用失败
+  warn        = 3, // 反映某些需要注意的可能有潜在危险的情况，可能会造成崩溃或逻辑错误之类
+  info        = 4, // 表示程序进程的信息
+  debug       = 5, // 普通的调试信息，这类信息发布时一般不输出
+  trace       = 6, // 最精细的调试信息，多用于定位错误，查看某些变量的值
+  on          = 7, // 全输出（默认）
+  }
+
+number    xlog_level = xlog_level_enum.on;
 ```
 
 - 根据xlog_level的动态调试等级，决定是否输出信息
@@ -1044,7 +1010,7 @@ void      string:xtrace   ( ... );
 
 ## zlib
 
-- 压缩/解压失败，返回nil & 错误码
+- 压缩/解压失败，返回"" & 错误码
 
 ```
 string    zlib_compress   ( string data );
@@ -1057,7 +1023,7 @@ string    string:zup      ( );
 
 ## gzip
 
-- 压缩/解压失败，返回nil & 错误信息
+- 压缩/解压失败，返回"" & 错误码 [& 错误码]
 - gzip解压时，尝试带head/不带head的gzip解压，以及deflate解压
 
 ```
@@ -1067,218 +1033,250 @@ string    string:gzcp     ( );
 string    string:gzup     ( );
 ```
 
--------- -------- -------- --------
-         �����ȼ�����
--------- -------- -------- --------
+---- ---- ---- ----
 
-��
-  string      main_analysis_level = "detail"; --ȫ�ֽ����ȼ����ƣ�Ĭ��ϸ�����
+## Wireshark解析等级控制
 
-    --�����ȼ���"simple"|"more"|"complex"|"detail"������ϸ���������������Ч������½�
-    --�����ȼ�������д��"s|m|c|d|S|M|C|D"
-    
-��
-  table       analysis_level_tables =    
+- 解析等级（解析细度逐层提升，解析效率逐层下降）
+
+```
+enum analysis_level_enum =    
     {
-    simple  = 1,        s = 1,
-    more    = 2,        m = 2,
-    complex = 3,        c = 3,
-    detail  = 4,        d = 4,
-    };                                  --�ȼ�ֵת��
+    simple  = 1,
+    more    = 2,
+    complex = 3,
+    detail  = 4,
+    };
+```
 
-  --�ṩ��д���ٽ���    
-  const int   alvlS = analysis_level_tables.simple;
-  const int   alvlM = analysis_level_tables.more;
-  const int   alvlC = analysis_level_tables.complex;
-  const int   alvlD = analysis_level_tables.detail;
+- 提供简写加速解析
 
--------- -------- -------- --------
-         �Զ����ʽ��
--------- -------- -------- --------
---FormatEx�ṩͨ�õ��Զ����ʽ����������TreeAddExʹ��
+```
+const int   alvlS = analysis_level_enum.simple;
+const int   alvlM = analysis_level_enum.more;
+const int   alvlC = analysis_level_enum.complex;
+const int   alvlD = analysis_level_enum.detail;
+```
 
-��
-  uint8;              --0x00(0)                     1 byte
-  uint16;             --0x0000(0)                   2 byte
-  uint24;             --0x000000(0)                 3 byte
-  uint32;             --0x00000000(0)               4 byte
-  uint64;             --0x0000000000000000(0)       8 byte
-  int8;               --0x00(0)                     1 byte
-  int16;              --0x0000(0)                   2 byte
-  int24;              --0x000000(0)                 3 byte
-  int32;              --0x00000000(0)               4 byte
-  int64;              --0x0000000000000000(0)       8 byte
+- 全局解析等级控制，默认细度最高
 
-  bool;               --true|false                  1 byte
-  ipv4;               --hostname(0.0.0.0)           4 byte
-                        0.0.0.0         //��hostname�޷�ȷ��ʱ����ʾ
-  ipv4_port;          --hostname:port(0.0.0.0:0)    6 byte
-                        0.0.0.0:0       //��hostname�޷�ȷ��ʱ����ʾ
-                        
-  xipv4_port;         --hostname:port(0.0.0.0:0)    6 byte
-                        0.0.0.0:0       //��hostname�޷�ȷ��ʱ����ʾ
-                                        //�ֽ�˳�����ڱ�ʾport��ע��ip���ֽ���port�෴
-  float;              --0.0             //���Ӵ�С��
-  string;             --00000           //size == -1ʱ��ȡʣ����������
-                                        //ע�����-1�����ฺֵ������
-                                        //ע����ֵ����tvb��ΧҲ����
-                                        //ע��size==0�����Թ������һ��tree
-  bytes;              --000000          //size == -1ʱ��ȡʣ����������
+```
+int       main_analysis_level = analysis_level_enum.detail;
+```
 
-  stringz;                              //������ָ��size����\0�ض�(����\0)������ȡʣ����������
+---- ---- ---- ----
 
-  //xline��ʾhead������������С
-  bxline_string;      bline_string;                 1 + N byte
-  wxline_string;      wline_string;                 2 + N byte
-  dxline_string;      dline_string;                 4 + N byte
+## Wireshark自定义格式化
 
-  bxline_bytes;       bline_bytes;                  1 + N byte
-  wxline_bytes;       wline_bytes;                  2 + N byte
-  dxline_bytes;       dline_bytes;                  4 + N byte
+- FormatEx提供通用的自定义格式化操作，被TreeAddEx使用
 
-  xdate               --0000/00/00 00:00:00         4 byte
-  xtime               --00day 00:00:00              4 byte
-  xcapacity           --0.00T|0.00G|0.00M|0.00K|0.00B       N byte��ָ��
+function    | show exsample                | usebyte | notes
+------------|------------------------------|---------|------
+uint8       | 0x00(0)                      | 1
+uint16      | 0x0000(0)                    | 2
+uint24      | 0x000000(0)                  | 3
+uint32      | 0x00000000(0)                | 4
+uint64      | 0x0000000000000000(0)        | 8
+int8        | 0x00(0)                      | 1
+int16       | 0x0000(0)                    | 2
+int24       | 0x000000(0)                  | 3
+int32       | 0x00000000(0)                | 4
+int64       | 0x0000000000000000(0)        | 8
+bool        | true\|false                  | 1
+ipv4        | hostname(0.0.0.0)            | 4
+ipv4_port   | hostname:port(0.0.0.0:0)     | 6
+xipv4_port  | hostname:port(0.0.0.0:0)     | 6       | 字节序标示port，ip与之反序
+float       | 0.0                          | 4
+string      | 0000000                      | N
+bytes       | 000000                       | N
+stringz     | 000000                       | N
+bxline_string|(00)0000                     | 1 + N   | x表示head不包含自身大小
+wxline_string|(0000)0000                   | 2 + N
+dxline_string|(00000000)0000               | 4 + N
+bline_string| [00]0000                     | 1 + N
+wline_string| [0000]0000                   | 2 + N
+dline_string| [00000000]0000               | 4 + N
+bxline_bytes| (00)0000                     | 1 + N
+wxline_bytes| (0000)0000                   | 2 + N
+dxline_bytes| (00000000)0000               | 4 + N
+bline_bytes | [00]0000                     | 1 + N
+wline_bytes | [0000]0000                   | 2 + N
+dline_bytes | [00000000]0000               | 4 + N
+xdate       | 0000/00/00 00:00:00          | 4
+xtime       | 00day 00:00:00               | 4
+xcapacity   | 0.00T\|0.00G\|0.00M\|0.00K\|0.00B| N   | size需指定
 
-  ע�⣬��string��bytes�������ݹ���ʱ���᷵�ص��������ݽضϽ������0000...
+- ipv4、ipv4_port、xipv4_port额外说明：
+    - 显示hostname，需要打开`编辑>>首选项>>Name Resolution>>Resolve network(IP) addresses`
+    - hostname无法确定时，不显示hostname，直接显示ip数值
+- string、bytes额外说明：
+    - size == 0时，返回空串
+    - size < 0 或 size > 剩余数据大小，抛出错误
+    - 返回数据限长，超过限长时，返回截断结果，如`0000...`
 
--------- -------- -------- --------
-         ProtoFieldEx����
--------- -------- -------- --------
 
-��
-    table protofieldsex, table protofields
-              ProtoFieldEx              (
-                                        [ string proto_pre_fix, ]
-                                        table fields
-                                        );                                [-1|2, +2, v]
-        --�����Զ������ʽ����Field��
-        --���ص�һ����������TreeAddEx���ʹ�ã���Ԫ������
-          {
-          ["__fmt"] = fmt;
-          [short_addr] = { type, field, exfunc },
-          ...
-          }
-        --���صڶ���������proto.fields�ĸ�ֵ
-          {
-          [short_addr] = field,
-          ...
-          }
-        --����proto_pre_fix��������abbrǰ׺��ǿ�ҽ�������֮��
-        --fields�Ĺ������£�
-          {
-            { func,         short_abbr,     name,         ... },
-            ...
-          };
-          name����Ϊnil����ʱ��nameĬ��ʹ��short_abbr������
-        --����Ԥ��ɨ��ȫ������ȡshort_abbr��name������󳤶ȣ��趨�����ʽ����������fix_name
-          "%-##s    %-##s    "
-        --���ڱ���ÿ��Ԫ�أ�������Ϊ֮����
-            field = ProtoField[ func ]( proto_pre_fix .. short_abbr, fix_name, ... );
-          ��funcδ��ʶ��ʱ��Ĭ��ʹ��string
-          ����funcΪFormatEx���Ӻ�����������������Ӻ�����ʱ��Ĭ����Ϊstring
-          ����TreeAddExʱ��������ͬ
-          �磺
-          { "wxline_string", "wxline_msg", "MSG" }  --wxline_msg��������string
-        --func���Ӵ�д��һ��ת����Сд��ʽ
-        --�����Զ��ڱ�ǰ��������Ĭ��Ԫ��
-          {
-            { "uint8",      "xxoo_b",     "Byte",    base.HEX_DEC },
-            { 'uint16',     "xxoo_w",     "Word",    base.HEX_DEC },
-            { 'uint32',     "xxoo_d",     "Dword",   base.HEX_DEC },
-            { 'uint64',     "xxoo_q",     "Qword",   base.HEX_DEC },
-            { 'bytes',      "xxoo_a",     "Array"                 },
-            { "string",     "xxoo_s",     "String"                },
-          };
-        --��Ԫ��====��������֮===
-        --!!!!��������fix_nameʱ����UTF8��ʽ�����ַ�����Ҫ��short_abbr��name����ΪUTF8!!!!
-        --fields��func������д��          
-          {
-          b   = "uint8",
-          w   = "uint16",
-          d   = "uint32",
-          q   = "uint64",
-          a   = "bytes",
-          s   = "string",
-          }
+---- ---- ---- ----
 
--------- -------- -------- --------
-         TreeAddEx����
--------- -------- -------- --------
+## Wireshark ProtoFieldEx函数
 
-��
-    int       TreeAddEx                 (
-                                        table     protofieldsex,
-                                        TreeItem  root,
-                                        Tvb       tvb,
-                                        int       off,
-                                        ...
-                                        );                                 [-4+, +1, v]
-        --����Ҫ���Զ�������Ԫ��
-        --protofieldsexΪProtoFieldEx���صĵ�һ����
-        --�������� short_abbr, [size|format_function,] short_abbr, ... ��ʽ�ṩ
-          �����ṩsize��format_functionʱ��ʹ��Ĭ�ϳ���
-          ��ָ��fieldδ��Ĭ�ϳ���ʱ��ʹ��ʣ�����������
-          ��ָ��size <= 0ʱ������������
-          Ĭ�ϳ����б����£�          
-            {
-            uint8     = 1,
-            uint16    = 2,
-            uint24    = 3,
-            uint32    = 4,
-            uint64    = 8,
-            int8      = 1,
-            int16     = 2,
-            int24     = 3,
-            int32     = 4,
-            int64     = 8,
+函数用于建立自动对齐格式化的Field表，定义如下：
+```
+table protofieldsex, table protofields
+          ProtoFieldEx              (
+                                    [ string abbr_pre_fix, ]
+                                    table fields
+                                    );
+```
 
-            framenum  = 4,
-            bool      = 1,
-            absolute_time = 4,
-            relative_time = 4,
+- 参数abbr_pre_fix用于添加abbr前缀（强烈建议添加之）
+- fields格式如下：
+```
+  {
+    { func,         short_abbr,     name,         ... },
+    ...
+  };
+```
+- fields的规则如下：
+    - name允许为nil，此时，nam = short_abbr
+    - func优先识别为ProtoField支持的类型名
+    - func允许为FormatEx的子函数名，用于自定义格式化，但此时field一律被定义为string
+    - func无视大写，一律转换成小写格式
+    - func未能识别时，抛出错误
+    - short_abbr与name必须为UTF8
+    - func支持如下简写：
+```
+  {
+  b   = "uint8",
+  w   = "uint16",
+  d   = "uint32",
+  q   = "uint64",
+  a   = "bytes",
+  s   = "string",
+  }
+```
+- 存在全局格式化设定，此设定将影响数据显示格式
+- 注意：临时修改此设定将无法影响预定义的Field格式
+```
+ShowFieldFormat = "%-20s  ";
+```
+- 对于表中每个元素，函数将为之生成
+```
+  field = ProtoField[ func ]( abbr_pre_fix .. short_abbr,
+      string.format( ShowFieldFormat, short_abbr, name ), ... );
+```
+- 返回第一个表`protofieldsex`，用于与TreeAddEx配合使用，简化元素添加
+```
+  {
+  [short_addr] =
+    {
+      types,  --一般用于确认默认大小
+      field,
+      exfunc,--此项存在时，表示需要调用自定义格式化
+    },
+  ...
+  }
+```
+- 返回第二个表用于proto.fields的赋值
+```
+  {
+  [short_addr] = field,
+  ...
+  }
+```
+- 存在如下**全局Field**：（使用全局函数`get_default_fieldsex()`获取此表）
+```
+  {
+    { "uint8",      "xxoo_b",     "Byte",    base.HEX_DEC },
+    { 'uint16',     "xxoo_w",     "Word",    base.HEX_DEC },
+    { 'uint32',     "xxoo_d",     "Dword",   base.HEX_DEC },
+    { 'uint64',     "xxoo_q",     "Qword",   base.HEX_DEC },
+    { 'bytes',      "xxoo_a",     "Bytes"                 },
+    { "string",     "xxoo_s",     "String"                },
+    { 'bytes',      "xxoo_x",     "unsolved"              },
+  };
+```
 
-            ipv4      = 4,
-            ipv6      = 16,
-            ether     = 6,
-            float     = 4,
-            double    = 8,
-            };
-        --abbr_name�ĵ�һ���ַ�����Ϊ'<'��'>'�����ڱ�ʾfield�Ĵ�С�ˣ�Ĭ�ϴ��
-        --abbr_name�����Կո�ָ�ע�͡��ո��Ժ���������ݱ���Ϊ��ע�Ͷ�����֮
-        --�������ش����������off
-        --���ṩformat_functionʱ��������������ʽ����
-          format_function( buf, off, nil, tree_add_func, root, field );
-          ��������ڲ�ʹ����tree_add_func��Ӧ����off + size
-          ����Ӧ����formatted_string, size��
-          ������������Զ�����tree_add_func( root, field, buf( off, size ), formatted_string );
+---- ---- ---- ----
 
-        --����ָ��abbr_name��protofieldsex����ƥ�䣬��ʱ�����¹���
-          --���ṩformat_functionʱ��������������ʽ����
-            format_function( buf, off, nil, tree_add_func, root, field );
-            ��������ڲ�ʹ����tree_add_func��Ӧ����off + size
-            ����Ӧ����formatted_string, size��
-            ������������Զ�����tree_add_func( root, buf( off, size), prefix_string .. formatted_string );
-          --��������ڿո��ָ�����ͣ�֧�����Ͳο�FormatEx
+## Wireshark TreeAddEx函数
 
-        ex:
-          off = TreeAddEx( fieldsex, root, tvb, off,
-            "xxoo_b",                   --��ʶ���short_abbr���ҿ�ʶ�𳤶�
-            "xx", 2,                    --ǿ�Ƴ���
-            "xxoo_s", format_xxx        --��ʶ���short_abbr��������ʶ�𳤶ȣ���Ҫ�Զ����ʽ��
-            );
-          --����Ч���������£�
-          xxoo_b        Byte      :0x00
-          xx            xx        :0x0000(0)
-          xxoo_s        String    :xxxxxxxx
+函数用于根据要求自动添加解析元素，定义如下：
+```
+int       TreeAddEx                 (
+                                    table     protofieldsex,
+                                    TreeItem  root,
+                                    Tvb       tvb,
+                                    int       off,
+                                    ...
+                                    );
+```
 
-        ex:
-          TreeAddEx( fieldsex, root, tvb, off,
-            "*xxoo_b uint8",            --ָ����ʶ���֧�����ͣ����ú���ָ����С
-            "*xxoo_s string", 6,        --֧�����Ϳ�ʶ�𣬵�ǿ��ָ����С
-            "*xxoo_a", 5                --��ָ�����ͣ�Ĭ��bytes
-            );
-          --����Ч���������£�
-          -             *xxoo_b   :0x00(0)
-          -             *xxoo_s   :xxxxxx
-          -             *xxoo_a   :##########
+- protofieldsex为ProtoFieldEx返回的第一个表
+- 不定参以 short_abbr, [size|format_function,] short_abbr, ... 形式提供
+    - short_abbr的第一个字符允许为'<'或'>'，用于标示field的大小端，默认大端
+    - short_abbr允许以空格分隔注释。空格以后的所有数据被认为是注释而无视之
+    - 当提供format_function时，函数调用如示：`format_function( buf, off, nil, tree_add_func, root, field, proto );`
+        - 如果调用内部使用了tree_add_func，应返回off + size
+        - 否则应返回formatted_string, size
+        - 处理将在其后自动调用`tree_add_func( root, field, buf( off, size ), formatted_string );`
+    - 当不提供size或format_function时，使用默认长度
+    - 当指定field未有默认长度时，使用剩余的所有数据
+    - 允许指定short_abbr在protofieldsex中无匹配，此时有如下规则
+          - 当提供format_function时，函数调用如示：`format_function( buf, off, nil, tree_add_func, root, field, proto );`
+              - 如果调用内部使用了tree_add_func，应返回off + size
+              - 否则应返回formatted_string, size。
+              - 处理将在其后自动调用`tree_add_func( root, proto, buf( off, size), prefix_string .. formatted_string );`
+    - 否则必须在空格后指定类型，支持类型参考FormatEx
+
+- 函数返回处理结束后的off
+
+默认长度列表如下：   
+```       
+{
+uint8     = 1,
+uint16    = 2,
+uint24    = 3,
+uint32    = 4,
+uint64    = 8,
+int8      = 1,
+int16     = 2,
+int24     = 3,
+int32     = 4,
+int64     = 8,
+
+framenum  = 4,
+bool      = 1,
+absolute_time = 4,
+relative_time = 4,
+
+ipv4      = 4,
+ipv6      = 16,
+ether     = 6,
+float     = 4,
+double    = 8,
+};
+```
+示例1：
+```
+off = TreeAddEx( fieldsex, root, tvb, off,
+  "xxoo_b",                   --可识别的short_abbr，且可识别长度
+  "xxoo_a", 2,                --强制长度
+  "xxoo_s", format_xxx        --可识别的short_abbr，但不可识别长度，需要自定义格式化
+  );
+--生成效果大致如下：
+  xxoo_b        Byte      :0x00
+  xxoo_a        Bytes     :0000
+  xxoo_s        String    :xxxxxxxx
+```
+示例2：
+```
+TreeAddEx( fieldsex, root, tvb, off,
+  "*xxoo_b uint8",            --指定可识别的支持类型，不用后续指定大小
+  "*xxoo_s string", 6,        --支持类型可识别，但强制指定大小
+  "*xxoo_a", 5                --不指定类型，默认bytes
+  );
+--生成效果大致如下：
+  -             *xxoo_b   :0x00(0)
+  -             *xxoo_s   :xxxxxx
+  -             *xxoo_a   :##########
+```

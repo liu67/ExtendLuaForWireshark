@@ -21,3 +21,16 @@
 wireshark会自动加载plugins/ver/目录下所有的lua，但这种加载不认utf-8 with BOM文件
 
 wireshark会枚举所有子目录下的lua并一一加载，这样就无法实现多层次的disscetor了
+
+---- ---- ---- ----
+
+## 测试与参考
+
+- `CheckExtendLuaForWireshark.lua`提供了一个测试dissector，以及相关的测试函数
+    1. 复制脚本到`Wireshark\LuaPlugins`目录，并将后缀改为`luae`
+    2. 打开wireshark，开始捕获
+    3. 打开菜单：工具>>Lua>>Evaluate
+    4. 输入命令`CheckExtendLuaForWireshark()`并执行
+    5. 脚本控制wireshark自动过滤出测试数据包
+
+- 测试脚本也是一个dessector书写参考
